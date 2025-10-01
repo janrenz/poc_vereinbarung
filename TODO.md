@@ -29,6 +29,7 @@
 - [ ] Server Action für Benachrichtigungen erstellen
 - [ ] Webhook/Event-System für Status-Änderungen
 - [ ] E-Mail-Konfiguration über Environment Variables
+- [ ] Textfelder sollten sich in der Größe anpassen so das der gesamte text zu sehen ist
 
 ---
 
