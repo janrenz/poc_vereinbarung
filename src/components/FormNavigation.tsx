@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
 type Entry = {
+  title?: string;
   id: string;
   zielsetzungenText?: string | null;
   beginnSchuljahr?: string | null;
@@ -115,7 +116,7 @@ export function FormNavigation({ code, schoolName, entries, currentEntryId }: Fo
                   <ul className="divide-y divide-[var(--md-sys-color-outline-variant)]">
                     {entries.map((entry, index) => {
                       const isActive = entry.id === currentEntryId;
-                      const entryTitle = entry.zielsetzungenText || `Eintrag ${index + 1}`;
+                      const entryTitle = entry.title || entry.zielsetzungenText || `Eintrag ${index + 1}`;
                       const timeframe = [entry.beginnSchuljahr, entry.endeSchuljahr]
                         .filter(Boolean)
                         .join(" - ") || "Zeitraum nicht festgelegt";
