@@ -5,7 +5,7 @@
 - [x] Prisma Schema auf PostgreSQL umgestellt
 - [x] `.env.example` erstellt
 - [x] `vercel.json` konfiguriert
-- [ ] Code auf GitHub/GitLab gepusht
+- [x] Code auf GitHub gepusht (https://github.com/janrenz/poc_vereinbarung)
 
 ## Vercel Setup
 
