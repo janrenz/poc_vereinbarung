@@ -154,17 +154,57 @@ model Comment {
   @@index([formId])
 }
 
+model Session {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  token          String   @unique
+  expiresAt      DateTime
+  lastActivityAt DateTime @default(now())
+  ipAddress      String?
+  userAgent      String?
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
 model PasswordResetToken {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  
+
   email     String
   token     String   @unique
   expiresAt DateTime
   usedAt    DateTime?
-  
+
   @@index([email])
   @@index([token])
+}
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+
+  userId       String?
+  userEmail    String?
+  action       String   // "LOGIN", "LOGOUT", "FORM_CREATED", "FORM_APPROVED", etc.
+  resourceType String?  // "Form", "Entry", "User"
+  resourceId   String?
+  ipAddress    String?
+  userAgent    String?
+  metadata     Json?    // Additional context
+  success      Boolean  @default(true)
+  errorMessage String?
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@index([resourceType, resourceId])
 }
 
 model Notification {
@@ -200,8 +240,11 @@ model User {
   active    Boolean  @default(true)
 
   lastLoginAt DateTime?
+  failedLoginAttempts Int @default(0)
+  lockedUntil DateTime?
 
   forms     Form[]   // Forms created by this user
+  sessions  Session[] // Active sessions
 
   @@index([email])
   @@index([role])
