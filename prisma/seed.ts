@@ -7,36 +7,48 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting seed...');
 
-  // Create demo users (Admin and Superadmin)
-  const demoAdminPassword = await bcrypt.hash('admin123', 12);
-  const demoAdmin = await prisma.user.upsert({
-    where: { email: 'admin@schulamt.nrw' },
+  // Create admin user from ENV variables (for production)
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@schulamt.nrw';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const hashedAdminPassword = await bcrypt.hash(adminPassword, 12);
+
+  const admin = await prisma.user.upsert({
+    where: { email: adminEmail },
     update: {},
     create: {
-      email: 'admin@schulamt.nrw',
-      password: demoAdminPassword,
-      name: 'Demo Admin',
+      email: adminEmail,
+      password: hashedAdminPassword,
+      name: 'Admin',
       role: 'ADMIN',
       active: true,
     },
   });
-  console.log('✓ Demo Admin created:', demoAdmin.email);
+  console.log('✓ Admin created:', admin.email);
 
-  const demoSuperadminPassword = await bcrypt.hash('superadmin123', 12);
-  const demoSuperadmin = await prisma.user.upsert({
-    where: { email: 'superadmin@schulamt.nrw' },
-    update: {},
-    create: {
-      email: 'superadmin@schulamt.nrw',
-      password: demoSuperadminPassword,
-      name: 'Demo Superadmin',
-      role: 'SUPERADMIN',
-      active: true,
-    },
-  });
-  console.log('✓ Demo Superadmin created:', demoSuperadmin.email);
+  // Create demo superadmin (only in development)
+  if (process.env.NODE_ENV !== 'production') {
+    const demoSuperadminPassword = await bcrypt.hash('superadmin123', 12);
+    const demoSuperadmin = await prisma.user.upsert({
+      where: { email: 'superadmin@schulamt.nrw' },
+      update: {},
+      create: {
+        email: 'superadmin@schulamt.nrw',
+        password: demoSuperadminPassword,
+        name: 'Demo Superadmin',
+        role: 'SUPERADMIN',
+        active: true,
+      },
+    });
+    console.log('✓ Demo Superadmin created:', demoSuperadmin.email);
+  }
 
-  // Create schools
+  // Skip demo data in production
+  if (process.env.NODE_ENV === 'production') {
+    console.log('✅ Production seed completed (admin user only)!');
+    return;
+  }
+
+  // Create demo schools (development only)
   const school1 = await prisma.school.upsert({
     where: { externalId: 'test-school-1' },
     update: {},
