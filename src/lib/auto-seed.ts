@@ -24,10 +24,21 @@ export async function autoSeed() {
 
       const adminEmail = process.env.ADMIN_EMAIL;
       const adminPassword = process.env.ADMIN_PASSWORD;
+      const adminRole = process.env.ADMIN_ROLE || "ADMIN"; // Default to ADMIN, can be set to SUPERADMIN
 
       if (!adminEmail || !adminPassword) {
         console.error(
           "❌ ADMIN_EMAIL and ADMIN_PASSWORD must be set in environment variables!"
+        );
+        return;
+      }
+
+      // Validate role
+      if (adminRole !== "ADMIN" && adminRole !== "SUPERADMIN") {
+        console.error(
+          "❌ ADMIN_ROLE must be either ADMIN or SUPERADMIN (got: " +
+            adminRole +
+            ")"
         );
         return;
       }
@@ -38,13 +49,13 @@ export async function autoSeed() {
         data: {
           email: adminEmail,
           password: hashedPassword,
-          name: "Admin",
-          role: "ADMIN",
+          name: adminRole === "SUPERADMIN" ? "Super Admin" : "Admin",
+          role: adminRole as "ADMIN" | "SUPERADMIN",
           active: true,
         },
       });
 
-      console.log("✅ Admin user created:", admin.email);
+      console.log(`✅ ${adminRole} user created:`, admin.email);
       seeded = true;
     } else {
       console.log("✓ Users already exist, skipping auto-seed");
