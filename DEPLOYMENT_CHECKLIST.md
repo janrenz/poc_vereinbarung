@@ -14,7 +14,7 @@
 - [ ] Datenbank mit Projekt verbunden
 - [ ] Environment Variables gesetzt:
   - [ ] `DATABASE_URL` = `${POSTGRES_PRISMA_URL}`
-  - [ ] `DIRECT_URL` = `${POSTGRES_URL_NON_POOLING}`
+  - [ ] `DATABASE_URL_UNPOOLED` = `${POSTGRES_URL_NON_POOLING}`
   - [ ] `AUTH_SECRET` (neu generiert mit `openssl rand -base64 32`)
   - [ ] `ADMIN_EMAIL` (geändert)
   - [ ] `ADMIN_PASSWORD` (starkes Passwort)

@@ -32,7 +32,7 @@ Diese Anleitung erklärt, wie Sie die Zielvereinbarung Digital App auf Vercel mi
 3. Vercel fügt automatisch die Environment Variables hinzu:
    - `POSTGRES_URL`
    - `POSTGRES_PRISMA_URL` (→ verwenden als `DATABASE_URL`)
-   - `POSTGRES_URL_NON_POOLING` (→ verwenden als `DIRECT_URL`)
+   - `POSTGRES_URL_NON_POOLING` (→ verwenden als `DATABASE_URL_UNPOOLED`)
 
 ### 4. Environment Variables konfigurieren
 
@@ -41,7 +41,7 @@ Gehen Sie zu **Settings → Environment Variables** und fügen Sie hinzu:
 ```bash
 # Database (bereits von Vercel gesetzt)
 DATABASE_URL = ${POSTGRES_PRISMA_URL}
-DIRECT_URL = ${POSTGRES_URL_NON_POOLING}
+DATABASE_URL_UNPOOLED = ${POSTGRES_URL_NON_POOLING}
 
 # Authentication Secret (WICHTIG: Ändern Sie dies!)
 AUTH_SECRET = "generiere-einen-sicheren-random-string"
@@ -173,7 +173,7 @@ npx prisma migrate reset
 
 ### Problem: "Migration failed"
 
-**Lösung:** Stellen Sie sicher, dass `DIRECT_URL` gesetzt ist. Vercel Postgres benötigt sowohl pooled (DATABASE_URL) als auch direct (DIRECT_URL) Verbindungen.
+**Lösung:** Stellen Sie sicher, dass `DATABASE_URL_UNPOOLED` gesetzt ist. Vercel Postgres benötigt sowohl pooled (DATABASE_URL) als auch direct (DATABASE_URL_UNPOOLED) Verbindungen.
 
 ### Problem: "PrismaClient is unable to run"
 
