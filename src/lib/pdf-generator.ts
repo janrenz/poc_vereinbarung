@@ -100,7 +100,12 @@ export function generateFormPDF(formData: FormData): jsPDF {
 
   doc.setFontSize(12);
   doc.setFont("helvetica", "normal");
-  doc.text(formData.schoolName, 105, 23, { align: "center" });
+  // Truncate long school names to fit in header (max ~70 characters)
+  const maxWidth = 180; // Leave 15mm margin on each side
+  const schoolNameLines = doc.splitTextToSize(formData.schoolName, maxWidth);
+  // Only show first line in header, truncate if needed
+  const displayName = schoolNameLines[0] + (schoolNameLines.length > 1 ? "..." : "");
+  doc.text(displayName, 105, 23, { align: "center", maxWidth: maxWidth });
 
   yPos = 40;
 
