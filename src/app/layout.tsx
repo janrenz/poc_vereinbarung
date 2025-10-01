@@ -3,12 +3,6 @@ import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { HeaderNotifications } from "@/components/HeaderNotifications";
-import { autoSeed } from "@/lib/auto-seed";
-
-// Run auto-seed on server startup
-if (process.env.NODE_ENV === "production") {
-  autoSeed();
-}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
