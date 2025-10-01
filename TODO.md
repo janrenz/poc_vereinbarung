@@ -1,5 +1,33 @@
 # TODO - Zielvereinbarung Digital
 
+## 🔐 CRITICAL - Security (In Bearbeitung)
+
+### Abgeschlossen (Parts 1 & 2 - 70/228 Stunden)
+- ✅ Sichere Session-Verwaltung mit crypto-tokens
+- ✅ Audit-Logging-System für DSGVO
+- ✅ Rate-Limiting-Infrastruktur
+- ✅ Sicherheits-Headers (HSTS, CSP, etc.)
+- ✅ Passwort-Komplexität (12+ Zeichen)
+- ✅ Account-Sperre nach 5 Fehlversuchen
+- ✅ Timing-Attack-Schutz im Login
+- ✅ Zod Input-Validierung
+- ✅ Secure Access-Code-Generierung (crypto.randomBytes)
+
+### Offen (Part 3 - 82 Stunden)
+- [ ] **KRITISCH:** Datenbank-Migration ausführen (`npx prisma migrate deploy`)
+- [ ] Rate-Limiting auf alle API-Endpunkte anwenden
+- [ ] Input-Validierung in allen Endpunkten
+- [ ] Audit-Logging überall integrieren
+- [ ] Fehlermeldungen sanitieren
+- [ ] Access-Codes in DB hashen
+- [ ] DSGVO Daten-Export-Endpunkt
+- [ ] E2E-Tests für neue Auth aktualisieren
+- [ ] Penetration-Testing
+
+**Siehe:** `SECURITY_IMPLEMENTATION_STATUS.md` für Details
+
+---
+
 ## Offene Aufgaben
 
 ### 1. Unterscheidung von Startchancen-Schulen
@@ -31,12 +59,18 @@
 - [ ] E-Mail-Konfiguration über Environment Variables
 - [ ] Textfelder sollten sich in der Größe anpassen so das der gesamte text zu sehen ist
 
+#### Bugs
+- [ ] Gantt diagramm wird nicht angezeigt (keine Zeitdaten vorhanden) obwohl welche hinterlegt sind
+- [ ] in der Admin forms Detail Ansicht sind immer noch keys statt den beschriebungen / Labels 
+
 ---
 
 ## In Bearbeitung
 - Timestamps für "Versendet" und "Angenommen" Events (Web + PDF)
 
 ## Erledigt ✅
+
+### Features
 - ✅ Schuljahr-Auswahl auf 7 Jahre erweitert (2024/25 - 2030/31)
 - ✅ Schulnummer-Feld hinzugefügt
 - ✅ Seed-Daten mit Schulnummern aktualisiert
@@ -47,6 +81,20 @@
 - ✅ Autosave-Funktionalität für Formulare
 - ✅ Admin-Bereich mit Formular-Verwaltung
 - ✅ Schul-Suche mit JedeSchule API
-- ✅ Cookie-basierte Authentifizierung
 - ✅ Formular-Versioning
+- ✅ Row-Level-Authorization (User sieht nur eigene Forms)
+- ✅ Auto-Seed für Production-Deployment
+- ✅ Login-Redirect wenn bereits eingeloggt
+
+### Security Fixes (Oktober 2025)
+- ✅ Kritische Autosave-Schwachstelle behoben (Access-Code-Prüfung)
+- ✅ Lange Schulnamen in PDF-Header korrigiert
+- ✅ Navigation zeigt User-Title statt "Eintrag 1"
+- ✅ Comprehensive Security Audit durchgeführt
+- ✅ Session-Management mit Crypto-Tokens
+- ✅ Rate-Limiting auf Login
+- ✅ Account-Lockout nach Fehlversuchen
+- ✅ Passwort-Komplexität erzwungen
+- ✅ Audit-Logging-System
+- ✅ Security-Headers (HSTS, CSP, etc.)
 
