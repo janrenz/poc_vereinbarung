@@ -1,4 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { rateLimit, RateLimits } from "@/lib/rate-limit";
+import { logAudit, getRequestInfo } from "@/lib/audit";
+import { getCurrentUser } from "@/lib/auth";
 
 type JedeSchuleItem = {
   id?: string | number;
@@ -95,11 +98,65 @@ const MOCK_SCHOOLS: SchoolResult[] = [
   },
 ];
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
+  const { ipAddress, userAgent } = getRequestInfo(req);
+
+  // Check authentication - only logged-in users can search schools
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    await logAudit({
+      action: "SCHOOL_SEARCH_FAILED",
+      resourceType: "School",
+      ipAddress,
+      userAgent,
+      success: false,
+      errorMessage: "Unauthorized",
+    });
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
+  // Rate limiting
+  const rateLimitResponse = rateLimit(req, RateLimits.FORM_ADMIN_ACTION);
+  if (rateLimitResponse) {
+    await logAudit({
+      userId: currentUser.id,
+      userEmail: currentUser.email,
+      action: "SCHOOL_SEARCH_FAILED",
+      resourceType: "School",
+      ipAddress,
+      userAgent,
+      success: false,
+      errorMessage: "Rate limit exceeded",
+    });
+    return rateLimitResponse;
+  }
+
   const { searchParams } = new URL(req.url);
   const q = (searchParams.get("q") || "").trim().toLowerCase();
+
   if (!q || q.length < 2) {
     return NextResponse.json({ schools: [] });
+  }
+
+  // Input validation
+  if (q.length > 100) {
+    await logAudit({
+      userId: currentUser.id,
+      userEmail: currentUser.email,
+      action: "SCHOOL_SEARCH_FAILED",
+      resourceType: "School",
+      ipAddress,
+      userAgent,
+      success: false,
+      errorMessage: "Search query too long",
+    });
+    return NextResponse.json(
+      { error: "Search query too long (max 100 characters)" },
+      { status: 400 }
+    );
   }
 
   // Try JedeSchule API with NRW filter
@@ -197,6 +254,21 @@ export async function GET(req: Request) {
       (school.name.toLowerCase().includes(q) ||
        school.city.toLowerCase().includes(q))
   );
+
+  await logAudit({
+    userId: currentUser.id,
+    userEmail: currentUser.email,
+    action: "SCHOOL_SEARCH",
+    resourceType: "School",
+    ipAddress,
+    userAgent,
+    success: true,
+    metadata: {
+      query: q,
+      resultsCount: filteredMockSchools.length,
+      source: "mock",
+    },
+  });
 
   console.log(`Using ${filteredMockSchools.length} mock NRW schools`);
   return NextResponse.json({ schools: filteredMockSchools });

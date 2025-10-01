@@ -5,6 +5,7 @@ import { Calendar, Download } from "lucide-react";
 
 type Entry = {
   id: string;
+  title?: string | null;
   zielsetzungenText: string | null;
   beginnSchuljahr: string | null;
   beginnHalbjahr: number | null;
@@ -54,7 +55,7 @@ function calculatePosition(
 export function GanttChart({ entries, schoolName }: GanttChartProps) {
   const { validEntries, minYear, maxYear, years } = useMemo(() => {
     const valid = entries.filter(
-      (e) => e.beginnSchuljahr && e.endeSchuljahr && e.zielsetzungenText
+      (e) => e.beginnSchuljahr && e.endeSchuljahr && (e.title || e.zielsetzungenText)
     );
     
     if (valid.length === 0) {
@@ -139,8 +140,9 @@ export function GanttChart({ entries, schoolName }: GanttChartProps) {
     const barX = leftMargin + (left / 100) * chartWidth;
     const barWidth = (width / 100) * chartWidth;
     
+    const entryLabel = entry.title || entry.zielsetzungenText || "Ohne Titel";
     return `
-  <text x="20" y="${y + 15}" class="label">${escapeXml(entry.zielsetzungenText?.substring(0, 40) || "Ohne Titel")}${(entry.zielsetzungenText?.length || 0) > 40 ? "..." : ""}</text>
+  <text x="20" y="${y + 15}" class="label">${escapeXml(entryLabel.substring(0, 40))}${entryLabel.length > 40 ? "..." : ""}</text>
   <rect x="${barX}" y="${y}" width="${barWidth}" height="30" class="timeline" rx="4"/>
   <text x="${barX + 5}" y="${y + 20}" style="font-size: 11px; fill: white;">${entry.beginnSchuljahr}/${entry.beginnHalbjahr} - ${entry.endeSchuljahr}/${entry.endeHalbjahr}</text>`;
   }).join("\n")}
@@ -222,7 +224,7 @@ export function GanttChart({ entries, schoolName }: GanttChartProps) {
                   {/* Entry Label */}
                   <div className="w-[280px] flex-shrink-0">
                     <div className="text-sm font-medium text-[var(--md-sys-color-on-surface)] truncate pr-2">
-                      {entry.zielsetzungenText || "Ohne Titel"}
+                      {entry.title || entry.zielsetzungenText || "Ohne Titel"}
                     </div>
                     <div className="text-xs text-[var(--md-sys-color-on-surface-variant)]">
                       {entry.beginnSchuljahr}/{entry.beginnHalbjahr} - {entry.endeSchuljahr}/

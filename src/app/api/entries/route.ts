@@ -1,27 +1,66 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { rateLimit, RateLimits } from "@/lib/rate-limit";
+import { CreateEntrySchema } from "@/lib/validation";
+import { logAudit, getRequestInfo } from "@/lib/audit";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  const { ipAddress, userAgent } = getRequestInfo(req);
+
+  // Rate limiting
+  const rateLimitResponse = rateLimit(req, RateLimits.ENTRY_SAVE);
+  if (rateLimitResponse) {
+    await logAudit({
+      action: "ENTRY_CREATE_FAILED",
+      resourceType: "Entry",
+      ipAddress,
+      userAgent,
+      success: false,
+      errorMessage: "Rate limit exceeded",
+    });
+    return rateLimitResponse;
+  }
+
   try {
-    const body = await req.json();
-    const { formId, ...entryData } = body;
-
-    if (!formId) {
-      return NextResponse.json(
-        { error: "formId is required" },
-        { status: 400 }
-      );
-    }
-
     // Get access code from header
     const accessCode = req.headers.get('x-access-code');
 
     if (!accessCode) {
+      await logAudit({
+        action: "ENTRY_CREATE_FAILED",
+        resourceType: "Entry",
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Missing access code",
+      });
       return NextResponse.json(
         { error: "Access code required" },
         { status: 401 }
       );
     }
+
+    const body = await req.json();
+
+    // Zod validation
+    const validation = CreateEntrySchema.safeParse(body);
+    if (!validation.success) {
+      await logAudit({
+        action: "ENTRY_CREATE_FAILED",
+        resourceType: "Entry",
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Validation failed",
+        metadata: { errors: validation.error.format() },
+      });
+      return NextResponse.json(
+        { error: "Invalid input", details: validation.error.format() },
+        { status: 400 }
+      );
+    }
+
+    const { formId, ...entryData } = validation.data;
 
     // Verify form exists AND user has access via access code
     const form = await prisma.form.findUnique({
@@ -32,6 +71,15 @@ export async function POST(req: Request) {
     });
 
     if (!form) {
+      await logAudit({
+        action: "ENTRY_CREATE_FAILED",
+        resourceType: "Entry",
+        resourceId: formId,
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Form not found",
+      });
       return NextResponse.json(
         { error: "Form not found" },
         { status: 404 }
@@ -40,6 +88,15 @@ export async function POST(req: Request) {
 
     // Verify access code matches
     if (form.accessCode?.code !== accessCode.toUpperCase()) {
+      await logAudit({
+        action: "ENTRY_CREATE_FAILED",
+        resourceType: "Entry",
+        resourceId: formId,
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Invalid access code",
+      });
       return NextResponse.json(
         { error: "Invalid access code for this form" },
         { status: 403 }
@@ -48,13 +105,22 @@ export async function POST(req: Request) {
 
     // Verify form is not already submitted/approved (read-only)
     if (form.status !== "DRAFT") {
+      await logAudit({
+        action: "ENTRY_CREATE_FAILED",
+        resourceType: "Entry",
+        resourceId: formId,
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Form not in draft status",
+      });
       return NextResponse.json(
         { error: "Cannot add entries to submitted or approved forms" },
         { status: 403 }
       );
     }
 
-    // Create entry with autosave data
+    // Create entry with validated data
     const entry = await prisma.entry.create({
       data: {
         formId,
@@ -81,10 +147,30 @@ export async function POST(req: Request) {
       },
     });
 
-    console.log(`Entry created: ${entry.id} for form ${formId}`);
+    await logAudit({
+      action: "ENTRY_CREATED",
+      resourceType: "Entry",
+      resourceId: entry.id,
+      ipAddress,
+      userAgent,
+      success: true,
+      metadata: {
+        formId,
+        title: entry.title,
+      },
+    });
+
     return NextResponse.json({ entry, success: true });
   } catch (error) {
     console.error("Error creating entry:", error);
+    await logAudit({
+      action: "ENTRY_CREATE_FAILED",
+      resourceType: "Entry",
+      ipAddress,
+      userAgent,
+      success: false,
+      errorMessage: error instanceof Error ? error.message : "Unknown error",
+    });
     return NextResponse.json(
       { error: "Failed to create entry" },
       { status: 500 }

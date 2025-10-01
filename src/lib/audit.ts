@@ -1,23 +1,33 @@
 import { prisma } from "./prisma";
 import { NextRequest } from "next/server";
+import type { Prisma } from "@prisma/client";
 
 export type AuditAction =
   | "LOGIN"
   | "LOGIN_FAILED"
   | "LOGOUT"
   | "FORM_CREATED"
+  | "FORM_CREATE_FAILED"
   | "FORM_UPDATED"
   | "FORM_APPROVED"
+  | "FORM_APPROVE_FAILED"
   | "FORM_RETURNED"
+  | "FORM_RETURN_FAILED"
   | "FORM_EXPORTED"
+  | "FORM_EXPORT_FAILED"
   | "FORM_DELETED"
   | "ENTRY_CREATED"
+  | "ENTRY_CREATE_FAILED"
   | "ENTRY_UPDATED"
+  | "ENTRY_UPDATE_FAILED"
   | "ENTRY_DELETED"
+  | "ENTRY_DELETE_FAILED"
   | "USER_CREATED"
   | "USER_UPDATED"
   | "USER_DELETED"
   | "ACCESS_CODE_USED"
+  | "SCHOOL_SEARCH"
+  | "SCHOOL_SEARCH_FAILED"
   | "UNAUTHORIZED_ACCESS";
 
 /**
@@ -56,7 +66,7 @@ export async function logAudit({
         resourceId,
         ipAddress: ipAddress ? sanitizeIp(ipAddress) : undefined,
         userAgent: userAgent ? sanitizeUserAgent(userAgent) : undefined,
-        metadata: metadata ? sanitizeMetadata(metadata) : undefined,
+        metadata: metadata ? (JSON.parse(JSON.stringify(sanitizeMetadata(metadata))) as Prisma.InputJsonValue) : undefined,
         success,
         errorMessage,
       },
@@ -71,15 +81,16 @@ export async function logAudit({
  * Extract IP and User-Agent from Next.js request
  */
 export function getRequestInfo(req: NextRequest | Request) {
-  const ipAddress =
-    req instanceof NextRequest
-      ? req.ip || req.headers.get("x-forwarded-for")
-      : req.headers.get("x-forwarded-for");
+  // Get IP from various headers
+  const forwarded = req.headers.get("x-forwarded-for");
+  const realIp = req.headers.get("x-real-ip");
 
+  // Extract first IP from x-forwarded-for (can be comma-separated)
+  const ipAddress = forwarded?.split(",")[0].trim() || realIp || "unknown";
   const userAgent = req.headers.get("user-agent");
 
   return {
-    ipAddress: ipAddress || "unknown",
+    ipAddress,
     userAgent: userAgent || "unknown",
   };
 }

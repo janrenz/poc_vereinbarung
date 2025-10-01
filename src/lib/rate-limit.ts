@@ -89,7 +89,7 @@ function getClientIp(req: NextRequest): string {
     return realIp;
   }
 
-  return req.ip || "unknown";
+  return "unknown";
 }
 
 /**
@@ -108,6 +108,13 @@ export const RateLimits = {
     maxRequests: 20,
     windowMs: 60 * 60 * 1000, // 1 hour
     message: "Too many form creations, please try again later",
+  },
+
+  // Admin form actions (approve, return, export)
+  FORM_ADMIN_ACTION: {
+    maxRequests: 50,
+    windowMs: 60 * 1000, // 1 minute
+    message: "Too many form actions, please slow down",
   },
 
   // Entry autosave

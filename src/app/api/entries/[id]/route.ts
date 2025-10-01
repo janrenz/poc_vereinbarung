@@ -1,21 +1,69 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { rateLimit, RateLimits } from "@/lib/rate-limit";
+import { UpdateEntrySchema } from "@/lib/validation";
+import { logAudit, getRequestInfo } from "@/lib/audit";
 
 export async function PATCH(
-  req: Request,
+  req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  try {
-    const { id } = await context.params;
-    const body = await req.json();
+  const { ipAddress, userAgent } = getRequestInfo(req);
+  const { id } = await context.params;
 
+  // Rate limiting
+  const rateLimitResponse = rateLimit(req, RateLimits.ENTRY_SAVE);
+  if (rateLimitResponse) {
+    await logAudit({
+      action: "ENTRY_UPDATE_FAILED",
+      resourceType: "Entry",
+      resourceId: id,
+      ipAddress,
+      userAgent,
+      success: false,
+      errorMessage: "Rate limit exceeded",
+    });
+    return rateLimitResponse;
+  }
+
+  try {
     // Get access code from header
     const accessCode = req.headers.get('x-access-code');
 
     if (!accessCode) {
+      await logAudit({
+        action: "ENTRY_UPDATE_FAILED",
+        resourceType: "Entry",
+        resourceId: id,
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Missing access code",
+      });
       return NextResponse.json(
         { error: "Access code required" },
         { status: 401 }
+      );
+    }
+
+    const body = await req.json();
+
+    // Zod validation
+    const validation = UpdateEntrySchema.safeParse(body);
+    if (!validation.success) {
+      await logAudit({
+        action: "ENTRY_UPDATE_FAILED",
+        resourceType: "Entry",
+        resourceId: id,
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Validation failed",
+        metadata: { errors: validation.error.format() },
+      });
+      return NextResponse.json(
+        { error: "Invalid input", details: validation.error.format() },
+        { status: 400 }
       );
     }
 
@@ -32,6 +80,15 @@ export async function PATCH(
     });
 
     if (!existingEntry) {
+      await logAudit({
+        action: "ENTRY_UPDATE_FAILED",
+        resourceType: "Entry",
+        resourceId: id,
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Entry not found",
+      });
       return NextResponse.json(
         { error: "Entry not found" },
         { status: 404 }
@@ -40,6 +97,15 @@ export async function PATCH(
 
     // Verify access code matches
     if (existingEntry.form.accessCode?.code !== accessCode.toUpperCase()) {
+      await logAudit({
+        action: "ENTRY_UPDATE_FAILED",
+        resourceType: "Entry",
+        resourceId: id,
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Invalid access code",
+      });
       return NextResponse.json(
         { error: "Invalid access code for this entry" },
         { status: 403 }
@@ -48,13 +114,22 @@ export async function PATCH(
 
     // Verify form is not already submitted/approved (read-only)
     if (existingEntry.form.status !== "DRAFT") {
+      await logAudit({
+        action: "ENTRY_UPDATE_FAILED",
+        resourceType: "Entry",
+        resourceId: id,
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Form not in draft status",
+      });
       return NextResponse.json(
         { error: "Cannot modify entries in submitted or approved forms" },
         { status: 403 }
       );
     }
 
-    // Update entry with provided data
+    // Update entry with validated data
     const entry = await prisma.entry.update({
       where: { id },
       data: {
@@ -81,10 +156,31 @@ export async function PATCH(
       },
     });
 
-    console.log(`Entry autosaved: ${id}`);
+    await logAudit({
+      action: "ENTRY_UPDATED",
+      resourceType: "Entry",
+      resourceId: id,
+      ipAddress,
+      userAgent,
+      success: true,
+      metadata: {
+        formId: existingEntry.formId,
+        title: entry.title,
+      },
+    });
+
     return NextResponse.json({ entry, success: true });
   } catch (error) {
     console.error("Error updating entry:", error);
+    await logAudit({
+      action: "ENTRY_UPDATE_FAILED",
+      resourceType: "Entry",
+      resourceId: id,
+      ipAddress,
+      userAgent,
+      success: false,
+      errorMessage: error instanceof Error ? error.message : "Unknown error",
+    });
     return NextResponse.json(
       { error: "Failed to update entry" },
       { status: 500 }
@@ -93,16 +189,41 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  req: Request,
+  req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  try {
-    const { id } = await context.params;
+  const { ipAddress, userAgent } = getRequestInfo(req);
+  const { id } = await context.params;
 
+  // Rate limiting
+  const rateLimitResponse = rateLimit(req, RateLimits.ENTRY_SAVE);
+  if (rateLimitResponse) {
+    await logAudit({
+      action: "ENTRY_DELETE_FAILED",
+      resourceType: "Entry",
+      resourceId: id,
+      ipAddress,
+      userAgent,
+      success: false,
+      errorMessage: "Rate limit exceeded",
+    });
+    return rateLimitResponse;
+  }
+
+  try {
     // Get access code from header
     const accessCode = req.headers.get('x-access-code');
 
     if (!accessCode) {
+      await logAudit({
+        action: "ENTRY_DELETE_FAILED",
+        resourceType: "Entry",
+        resourceId: id,
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Missing access code",
+      });
       return NextResponse.json(
         { error: "Access code required" },
         { status: 401 }
@@ -122,6 +243,15 @@ export async function DELETE(
     });
 
     if (!existingEntry) {
+      await logAudit({
+        action: "ENTRY_DELETE_FAILED",
+        resourceType: "Entry",
+        resourceId: id,
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Entry not found",
+      });
       return NextResponse.json(
         { error: "Entry not found" },
         { status: 404 }
@@ -130,6 +260,15 @@ export async function DELETE(
 
     // Verify access code matches
     if (existingEntry.form.accessCode?.code !== accessCode.toUpperCase()) {
+      await logAudit({
+        action: "ENTRY_DELETE_FAILED",
+        resourceType: "Entry",
+        resourceId: id,
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Invalid access code",
+      });
       return NextResponse.json(
         { error: "Invalid access code for this entry" },
         { status: 403 }
@@ -138,6 +277,15 @@ export async function DELETE(
 
     // Verify form is not already submitted/approved (read-only)
     if (existingEntry.form.status !== "DRAFT") {
+      await logAudit({
+        action: "ENTRY_DELETE_FAILED",
+        resourceType: "Entry",
+        resourceId: id,
+        ipAddress,
+        userAgent,
+        success: false,
+        errorMessage: "Form not in draft status",
+      });
       return NextResponse.json(
         { error: "Cannot delete entries in submitted or approved forms" },
         { status: 403 }
@@ -148,10 +296,31 @@ export async function DELETE(
       where: { id },
     });
 
-    console.log(`Entry deleted: ${id}`);
+    await logAudit({
+      action: "ENTRY_DELETED",
+      resourceType: "Entry",
+      resourceId: id,
+      ipAddress,
+      userAgent,
+      success: true,
+      metadata: {
+        formId: existingEntry.formId,
+        title: existingEntry.title,
+      },
+    });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting entry:", error);
+    await logAudit({
+      action: "ENTRY_DELETE_FAILED",
+      resourceType: "Entry",
+      resourceId: id,
+      ipAddress,
+      userAgent,
+      success: false,
+      errorMessage: error instanceof Error ? error.message : "Unknown error",
+    });
     return NextResponse.json(
       { error: "Failed to delete entry" },
       { status: 500 }

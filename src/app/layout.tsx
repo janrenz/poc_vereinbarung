@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { HeaderNotifications } from "@/components/HeaderNotifications";
+import { UserMenu } from "@/components/UserMenu";
+import { getCurrentUser } from "@/lib/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,11 +21,13 @@ export const metadata: Metadata = {
   description: "Moderne, freundliche digitale Zielvereinbarungen für Schulen & Schulämter",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const currentUser = await getCurrentUser();
+
   return (
     <html lang="de">
       <body
@@ -46,34 +50,44 @@ export default function RootLayout({
               >
                 NRW Zielvereinbarung Digital
               </Link>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <nav className="flex gap-1" aria-label="Hauptnavigation">
-                  <Link 
-                    className="px-4 py-2 text-[var(--md-sys-color-on-surface)] hover:bg-[var(--md-sys-color-surface-variant)] rounded transition-colors touch-manipulation font-medium" 
+                  <Link
+                    className="px-4 py-2 text-[var(--md-sys-color-on-surface)] hover:bg-[var(--md-sys-color-surface-variant)] rounded transition-colors touch-manipulation font-medium"
                     href="/"
                   >
                     Start
                   </Link>
-                  <Link 
-                    className="px-4 py-2 text-[var(--md-sys-color-on-surface)] hover:bg-[var(--md-sys-color-surface-variant)] rounded transition-colors touch-manipulation font-medium" 
-                    href="/login"
-                  >
-                    Schulamt
-                  </Link>
-                  <Link 
-                    className="px-4 py-2 text-[var(--md-sys-color-on-surface)] hover:bg-[var(--md-sys-color-surface-variant)] rounded transition-colors touch-manipulation font-medium" 
+                  {!currentUser ? (
+                    <Link
+                      className="px-4 py-2 text-[var(--md-sys-color-on-surface)] hover:bg-[var(--md-sys-color-surface-variant)] rounded transition-colors touch-manipulation font-medium"
+                      href="/login"
+                    >
+                      Schulamt
+                    </Link>
+                  ) : (
+                    <Link
+                      className="px-4 py-2 text-[var(--md-sys-color-on-surface)] hover:bg-[var(--md-sys-color-surface-variant)] rounded transition-colors touch-manipulation font-medium"
+                      href="/admin"
+                    >
+                      Schulamt
+                    </Link>
+                  )}
+                  <Link
+                    className="px-4 py-2 text-[var(--md-sys-color-on-surface)] hover:bg-[var(--md-sys-color-surface-variant)] rounded transition-colors touch-manipulation font-medium"
                     href="/formular"
                   >
                     Zugang für Schulen
                   </Link>
-                  <Link 
-                    className="px-4 py-2 text-[var(--md-sys-color-on-surface)] hover:bg-[var(--md-sys-color-surface-variant)] rounded transition-colors touch-manipulation font-medium" 
+                  <Link
+                    className="px-4 py-2 text-[var(--md-sys-color-on-surface)] hover:bg-[var(--md-sys-color-surface-variant)] rounded transition-colors touch-manipulation font-medium"
                     href="/completed"
                   >
                     Abgeschlossene Formulare
                   </Link>
                 </nav>
                 <HeaderNotifications />
+                <UserMenu user={currentUser} />
               </div>
             </div>
           </div>

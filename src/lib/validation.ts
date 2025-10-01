@@ -124,11 +124,11 @@ export function validate<T>(schema: z.ZodSchema<T>, data: unknown): {
 /**
  * Format Zod errors for API responses
  */
-export function formatZodErrors(error: z.ZodError): {
+export function formatZodErrors<T>(error: z.ZodError<T>): {
   field: string;
   message: string;
 }[] {
-  return error.errors.map((err) => ({
+  return error.issues.map((err) => ({
     field: err.path.join("."),
     message: err.message,
   }));

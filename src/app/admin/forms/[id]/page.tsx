@@ -329,6 +329,14 @@ export default async function AdminFormDetailPage({ params }: { params: Promise<
                 </summary>
 
                 <div className="p-6 bg-[var(--md-sys-color-surface-variant)]/30 space-y-4">
+                  {/* Zielsetzungen Text */}
+                  {entry.zielsetzungenText && (
+                    <div>
+                      <h4 className="font-semibold mb-2 text-[var(--md-sys-color-on-surface)]">Zielsetzungen</h4>
+                      <p className="text-[var(--md-sys-color-on-surface-variant)] whitespace-pre-wrap">{entry.zielsetzungenText}</p>
+                    </div>
+                  )}
+
                   {/* Zielbereiche */}
                   {((entry.zielbereich1 && Array.isArray(entry.zielbereich1) && entry.zielbereich1.length > 0) ||
                     (entry.zielbereich2 && Array.isArray(entry.zielbereich2) && entry.zielbereich2.length > 0) ||
@@ -376,11 +384,49 @@ export default async function AdminFormDetailPage({ params }: { params: Promise<
                     </div>
                   )}
 
+                  {/* Datengrundlage */}
+                  {entry.datengrundlage && Array.isArray(entry.datengrundlage) && entry.datengrundlage.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold mb-2 text-[var(--md-sys-color-on-surface)]">Datengrundlage</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {(entry.datengrundlage as string[]).map((item, i) => (
+                          <span key={i} className="px-2 py-1 bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)] rounded text-xs">
+                            {DATENGRUNDLAGE_LABELS[item] || item}
+                          </span>
+                        ))}
+                      </div>
+                      {entry.datengrundlageAndere && (
+                        <p className="text-sm text-[var(--md-sys-color-on-surface-variant)] mt-2">
+                          <span className="font-medium">Andere:</span> {entry.datengrundlageAndere}
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Zielgruppe */}
+                  {entry.zielgruppe && Array.isArray(entry.zielgruppe) && entry.zielgruppe.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold mb-2 text-[var(--md-sys-color-on-surface)]">Zielgruppe</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {(entry.zielgruppe as string[]).map((item, i) => (
+                          <span key={i} className="px-2 py-1 bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)] rounded text-xs">
+                            {ZIELGRUPPE_LABELS[item] || item}
+                          </span>
+                        ))}
+                      </div>
+                      {entry.zielgruppeSusDetail && (
+                        <p className="text-sm text-[var(--md-sys-color-on-surface-variant)] mt-2">
+                          <span className="font-medium">SuS Detail:</span> {entry.zielgruppeSusDetail}
+                        </p>
+                      )}
+                    </div>
+                  )}
+
                   {/* Maßnahmen */}
                   {entry.massnahmen && (
                     <div>
                       <h4 className="font-semibold mb-2 text-[var(--md-sys-color-on-surface)]">Maßnahmen zur Zielerreichung</h4>
-                      <p className="text-[var(--md-sys-color-on-surface-variant)]">{entry.massnahmen}</p>
+                      <p className="text-[var(--md-sys-color-on-surface-variant)] whitespace-pre-wrap">{entry.massnahmen}</p>
                     </div>
                   )}
 
@@ -388,7 +434,7 @@ export default async function AdminFormDetailPage({ params }: { params: Promise<
                   {entry.indikatoren && (
                     <div>
                       <h4 className="font-semibold mb-2 text-[var(--md-sys-color-on-surface)]">Indikatoren</h4>
-                      <p className="text-[var(--md-sys-color-on-surface-variant)]">{entry.indikatoren}</p>
+                      <p className="text-[var(--md-sys-color-on-surface-variant)] whitespace-pre-wrap">{entry.indikatoren}</p>
                     </div>
                   )}
 

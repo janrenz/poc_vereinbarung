@@ -2,7 +2,13 @@
   "buildCommand": "prisma generate && prisma migrate deploy && next build",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "regions": ["fra1"]
+  "regions": ["fra1"],
+  "crons": [
+    {
+      "path": "/api/cron/cleanup-audit-logs",
+      "schedule": "0 2 * * *"
+    }
+  ]
 }
 
 
