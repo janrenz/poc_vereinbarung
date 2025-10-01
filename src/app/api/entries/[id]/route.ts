@@ -9,15 +9,48 @@ export async function PATCH(
     const { id } = await context.params;
     const body = await req.json();
 
-    // Verify entry exists
+    // Get access code from header
+    const accessCode = req.headers.get('x-access-code');
+
+    if (!accessCode) {
+      return NextResponse.json(
+        { error: "Access code required" },
+        { status: 401 }
+      );
+    }
+
+    // Verify entry exists AND user has access via access code
     const existingEntry = await prisma.entry.findUnique({
       where: { id },
+      include: {
+        form: {
+          include: {
+            accessCode: true,
+          },
+        },
+      },
     });
 
     if (!existingEntry) {
       return NextResponse.json(
         { error: "Entry not found" },
         { status: 404 }
+      );
+    }
+
+    // Verify access code matches
+    if (existingEntry.form.accessCode?.code !== accessCode.toUpperCase()) {
+      return NextResponse.json(
+        { error: "Invalid access code for this entry" },
+        { status: 403 }
+      );
+    }
+
+    // Verify form is not already submitted/approved (read-only)
+    if (existingEntry.form.status !== "DRAFT") {
+      return NextResponse.json(
+        { error: "Cannot modify entries in submitted or approved forms" },
+        { status: 403 }
       );
     }
 
@@ -60,11 +93,56 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _req: Request,
+  req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await context.params;
+
+    // Get access code from header
+    const accessCode = req.headers.get('x-access-code');
+
+    if (!accessCode) {
+      return NextResponse.json(
+        { error: "Access code required" },
+        { status: 401 }
+      );
+    }
+
+    // Verify entry exists AND user has access via access code
+    const existingEntry = await prisma.entry.findUnique({
+      where: { id },
+      include: {
+        form: {
+          include: {
+            accessCode: true,
+          },
+        },
+      },
+    });
+
+    if (!existingEntry) {
+      return NextResponse.json(
+        { error: "Entry not found" },
+        { status: 404 }
+      );
+    }
+
+    // Verify access code matches
+    if (existingEntry.form.accessCode?.code !== accessCode.toUpperCase()) {
+      return NextResponse.json(
+        { error: "Invalid access code for this entry" },
+        { status: 403 }
+      );
+    }
+
+    // Verify form is not already submitted/approved (read-only)
+    if (existingEntry.form.status !== "DRAFT") {
+      return NextResponse.json(
+        { error: "Cannot delete entries in submitted or approved forms" },
+        { status: 403 }
+      );
+    }
 
     await prisma.entry.delete({
       where: { id },

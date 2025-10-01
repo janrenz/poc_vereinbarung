@@ -55,6 +55,9 @@ export function EntryFormWithAutosaveClient({ entryId: initialEntryId, formId, c
     try {
       const response = await fetch(`/api/entries/${currentEntryId}`, {
         method: "DELETE",
+        headers: {
+          "X-Access-Code": code,
+        },
       });
 
       if (response.ok) {
@@ -128,6 +131,7 @@ export function EntryFormWithAutosaveClient({ entryId: initialEntryId, formId, c
         saveEndpoint={currentEntryId ? `/api/entries/${currentEntryId}` : `/api/entries`}
         entryId={currentEntryId}
         formId={formId}
+        accessCode={code}
         onEntryCreated={setCurrentEntryId}
         onStatusChange={setSaveStatus}
         saveCallbackRef={saveCallbackRef}

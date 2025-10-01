@@ -8,12 +8,13 @@ type AutosaveIndicatorProps = {
   saveEndpoint: string;
   entryId?: string;
   formId: string;
+  accessCode: string;
   onEntryCreated?: (entryId: string) => void;
   onStatusChange?: (status: "idle" | "saving" | "saved" | "error") => void;
   saveCallbackRef?: React.MutableRefObject<(() => Promise<boolean>) | null>;
 };
 
-export function AutosaveIndicator({ formRef, saveEndpoint, entryId, formId, onEntryCreated, onStatusChange, saveCallbackRef }: AutosaveIndicatorProps) {
+export function AutosaveIndicator({ formRef, saveEndpoint, entryId, formId, accessCode, onEntryCreated, onStatusChange, saveCallbackRef }: AutosaveIndicatorProps) {
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -77,6 +78,7 @@ export function AutosaveIndicator({ formRef, saveEndpoint, entryId, formId, onEn
         method: entryId ? "PATCH" : "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Access-Code": accessCode,
         },
         body: JSON.stringify(data),
       });
@@ -116,7 +118,7 @@ export function AutosaveIndicator({ formRef, saveEndpoint, entryId, formId, onEn
     if (saveCallbackRef) {
       saveCallbackRef.current = performAutosave;
     }
-  }, [saveCallbackRef, saveEndpoint, entryId, formId]);
+  }, [saveCallbackRef, saveEndpoint, entryId, formId, accessCode]);
 
   useEffect(() => {
     const form = formRef.current;
@@ -151,7 +153,7 @@ export function AutosaveIndicator({ formRef, saveEndpoint, entryId, formId, onEn
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [formRef, saveEndpoint, entryId, formId]);
+  }, [formRef, saveEndpoint, entryId, formId, accessCode]);
 
   const statusIndicator = () => {
     switch (saveStatus) {

@@ -13,15 +13,44 @@ export async function POST(req: Request) {
       );
     }
 
-    // Verify form exists
+    // Get access code from header
+    const accessCode = req.headers.get('x-access-code');
+
+    if (!accessCode) {
+      return NextResponse.json(
+        { error: "Access code required" },
+        { status: 401 }
+      );
+    }
+
+    // Verify form exists AND user has access via access code
     const form = await prisma.form.findUnique({
       where: { id: formId },
+      include: {
+        accessCode: true,
+      },
     });
 
     if (!form) {
       return NextResponse.json(
         { error: "Form not found" },
         { status: 404 }
+      );
+    }
+
+    // Verify access code matches
+    if (form.accessCode?.code !== accessCode.toUpperCase()) {
+      return NextResponse.json(
+        { error: "Invalid access code for this form" },
+        { status: 403 }
+      );
+    }
+
+    // Verify form is not already submitted/approved (read-only)
+    if (form.status !== "DRAFT") {
+      return NextResponse.json(
+        { error: "Cannot add entries to submitted or approved forms" },
+        { status: 403 }
       );
     }
 
