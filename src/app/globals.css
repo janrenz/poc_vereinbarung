@@ -1,0 +1,431 @@
+@import "tailwindcss";
+
+/* NRW Schulministerium inspired design system */
+:root {
+  /* Primary colors - NRW Blue palette (inspired by schulministerium.nrw) */
+  --md-sys-color-primary: #005AA9;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #E3F2FD;
+  --md-sys-color-on-primary-container: #001E3C;
+  
+  /* Secondary colors */
+  --md-sys-color-secondary: #546E7A;
+  --md-sys-color-on-secondary: #FFFFFF;
+  --md-sys-color-secondary-container: #E8F4F8;
+  --md-sys-color-on-secondary-container: #102027;
+  
+  /* Tertiary colors - Accent */
+  --md-sys-color-tertiary: #00838F;
+  --md-sys-color-on-tertiary: #FFFFFF;
+  --md-sys-color-tertiary-container: #B2EBF2;
+  --md-sys-color-on-tertiary-container: #002329;
+  
+  /* Surface colors - Clean white surfaces like NRW website */
+  --md-sys-color-surface: #FFFFFF;
+  --md-sys-color-on-surface: #1C1B1F;
+  --md-sys-color-surface-variant: #F5F5F5;
+  --md-sys-color-on-surface-variant: #49454F;
+  
+  /* Background - Light grey background */
+  --md-sys-color-background: #FAFAFA;
+  --md-sys-color-on-background: #1C1B1F;
+  
+  /* Error colors */
+  --md-sys-color-error: #D32F2F;
+  --md-sys-color-on-error: #FFFFFF;
+  --md-sys-color-error-container: #FFEBEE;
+  --md-sys-color-on-error-container: #410002;
+  
+  /* Outline */
+  --md-sys-color-outline: #BDBDBD;
+  --md-sys-color-outline-variant: #E0E0E0;
+  
+  /* Surface elevation - Subtle shadows like NRW website */
+  --md-sys-elevation-1: 0px 1px 3px rgba(0, 0, 0, 0.08);
+  --md-sys-elevation-2: 0px 2px 6px rgba(0, 0, 0, 0.08);
+  --md-sys-elevation-3: 0px 4px 8px rgba(0, 0, 0, 0.10);
+  --md-sys-elevation-4: 0px 8px 16px rgba(0, 0, 0, 0.12);
+  
+  /* Border radius - Subtle corners like NRW website */
+  --md-sys-shape-corner-small: 4px;
+  --md-sys-shape-corner-medium: 8px;
+  --md-sys-shape-corner-large: 12px;
+  --md-sys-shape-corner-xlarge: 16px;
+  --md-sys-shape-corner-full: 9999px;
+}
+
+@theme inline {
+  --color-background: var(--md-sys-color-background);
+  --color-foreground: var(--md-sys-color-on-background);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Disabled dark mode to ensure forms have light backgrounds */
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --md-sys-color-primary: #96CCFF;
+    --md-sys-color-on-primary: #003352;
+    --md-sys-color-primary-container: #004A73;
+    --md-sys-color-on-primary-container: #CFE4FF;
+    
+    --md-sys-color-surface: #111416;
+    --md-sys-color-on-surface: #E1E2E5;
+    --md-sys-color-surface-variant: #42474E;
+    --md-sys-color-on-surface-variant: #C2C7CE;
+    
+    --md-sys-color-background: #111416;
+    --md-sys-color-on-background: #E1E2E5;
+  }
+} */
+
+* {
+  @apply border-[var(--md-sys-color-outline-variant)];
+}
+
+body {
+  background: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Enhanced focus indicators for accessibility (WCAG 2.4.7) */
+*:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Special focus for buttons and links */
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+/* Skip to content link */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, opacity, transform;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Material Design elevation classes */
+.md-elevation-1 {
+  box-shadow: var(--md-sys-elevation-1);
+}
+
+.md-elevation-2 {
+  box-shadow: var(--md-sys-elevation-2);
+}
+
+.md-elevation-3 {
+  box-shadow: var(--md-sys-elevation-3);
+}
+
+.md-elevation-4 {
+  box-shadow: var(--md-sys-elevation-4);
+}
+
+/* Material Design surfaces */
+.md-surface {
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+}
+
+.md-surface-variant {
+  background-color: var(--md-sys-color-surface-variant);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Animated gradient background */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animated-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--md-sys-color-primary-container),
+    var(--md-sys-color-secondary-container),
+    var(--md-sys-color-tertiary-container)
+  );
+  background-size: 200% 200%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+/* Optimized for iPad/tablet viewport */
+@media (min-width: 768px) and (max-width: 1024px) {
+  body {
+    font-size: 16px; /* Optimal reading size for tablets */
+  }
+  
+  /* Better touch targets for tablets */
+  button, a[role="button"], input[type="submit"], input[type="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Larger interactive elements */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  textarea,
+  select {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+    padding: 12px 16px;
+  }
+  
+  /* Better checkbox and radio sizing for tablets */
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* iPad Pro landscape and larger tablets */
+@media (min-width: 1024px) and (max-width: 1366px) {
+  .max-w-5xl {
+    max-width: 90%;
+  }
+}
+
+/* Prevent zoom on input focus for iOS devices */
+@supports (-webkit-touch-callout: none) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Better scrolling on touch devices */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Print styles - Optimize entire page for printing */
+@media print {
+  /* Reset page styles */
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+
+  /* Hide non-essential elements */
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+
+  /* Hide interactive elements */
+  button,
+  a[href^="/"] {
+    display: none !important;
+  }
+
+  /* Optimize main content */
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Remove shadows and animations */
+  * {
+    box-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Optimize cards and surfaces */
+  .md-surface,
+  .md-surface-variant {
+    background: white !important;
+    border: 1px solid #ccc !important;
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
+  /* Optimize typography */
+  h1 {
+    font-size: 18pt;
+    margin-bottom: 8pt;
+    page-break-after: avoid;
+  }
+
+  h2 {
+    font-size: 16pt;
+    margin-top: 12pt;
+    margin-bottom: 6pt;
+    page-break-after: avoid;
+  }
+
+  h3 {
+    font-size: 14pt;
+    margin-top: 8pt;
+    margin-bottom: 4pt;
+    page-break-after: avoid;
+  }
+
+  /* Optimize tables and lists */
+  table,
+  ul,
+  ol {
+    page-break-inside: avoid;
+  }
+
+  /* Show URLs for external links */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #666;
+  }
+
+  /* Optimize Gantt chart for printing */
+  .gantt-chart {
+    page-break-inside: avoid;
+  }
+
+  /* Print entry details */
+  details {
+    page-break-inside: avoid;
+  }
+
+  details[open] summary {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Show all collapsed sections when printing */
+  details:not([open]) {
+    display: block;
+  }
+
+  details summary::after {
+    display: none;
+  }
+
+  /* Optimize spacing for print */
+  .space-y-6 > * + * {
+    margin-top: 1rem !important;
+  }
+
+  .space-y-4 > * + * {
+    margin-top: 0.75rem !important;
+  }
+
+  /* Remove unnecessary padding */
+  [class*="p-6"],
+  [class*="p-8"] {
+    padding: 0.5rem !important;
+  }
+
+  /* Optimize colors for black and white printing */
+  [class*="bg-"][class*="container"] {
+    background: #f5f5f5 !important;
+    border: 1px solid #ccc !important;
+  }
+
+  /* Ensure text is readable */
+  * {
+    color: black !important;
+  }
+
+  /* Keep only some specific colors */
+  .text-green-600,
+  [class*="success"] {
+    color: #059669 !important;
+  }
+
+  .text-red-800,
+  [class*="error"] {
+    color: #991b1b !important;
+  }
+
+  /* Page breaks */
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  /* Avoid breaking these elements */
+  .no-page-break {
+    page-break-inside: avoid;
+  }
+
+  /* Print header replacement */
+  main::before {
+    content: "Zielvereinbarung Digital";
+    display: block;
+    font-size: 14pt;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #333;
+  }
+
+  /* Show print date */
+  main::after {
+    content: "Gedruckt am: " attr(data-print-date);
+    display: block;
+    font-size: 9pt;
+    color: #666;
+    margin-top: 2rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #ccc;
+  }
+
+  /* Remove grid layout for printing */
+  [class*="grid"] {
+    display: block !important;
+  }
+
+  /* Hide sidebars */
+  aside {
+    display: none !important;
+  }
+
+  /* Full width content */
+  [class*="lg:grid-cols"] > * {
+    width: 100% !important;
+  }
+}

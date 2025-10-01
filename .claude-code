@@ -1,0 +1,401 @@
+# Zielvereinbarung Digital - Code Structure & Authorization
+
+## Project Overview
+
+A Next.js 15 application for managing digital target agreements (Zielvereinbarungen) between schools (Schulen) and school authorities (Schulämter). The application uses Material Design 3, Prisma ORM with SQLite (dev) / PostgreSQL (prod), and implements role-based access control.
+
+## Architecture
+
+### Tech Stack
+- **Framework**: Next.js 15 (App Router)
+- **Styling**: Tailwind CSS + Material Design 3
+- **Database**: SQLite (development) / PostgreSQL (production)
+- **ORM**: Prisma
+- **Authentication**: Cookie-based with Bcrypt
+- **Testing**: Playwright (E2E tests)
+- **External APIs**: JedeSchule API for school search
+
+### Directory Structure
+
+```
+src/
+├── app/                        # Next.js App Router pages
+│   ├── admin/                  # Protected admin area
+│   │   ├── forms/[id]/        # Form detail pages (with authorization)
+│   │   ├── notifications/     # Notification management
+│   │   └── users/             # User management (SUPERADMIN only)
+│   ├── formular/              # Public form access (by access code)
+│   │   ├── [code]/           # Form viewing/editing by schools
+│   │   └── entry/            # Entry CRUD operations
+│   ├── completed/             # View completed forms
+│   ├── login/                 # Login page
+│   └── api/                   # API routes
+│       ├── auth/              # Login/logout
+│       ├── forms/             # Form CRUD + authorization
+│       ├── entries/           # Entry CRUD
+│       └── schools/           # School search (JedeSchule API)
+├── components/                # React components
+├── lib/                       # Utility functions
+│   ├── auth.ts               # Authentication & authorization helpers
+│   ├── prisma.ts             # Prisma client
+│   ├── notifications.ts      # Notification system
+│   └── email.ts              # Email sending (Resend API)
+└── hooks/                     # Custom React hooks
+    ├── useAutosave.ts        # Autosave functionality
+    └── useDebounce.ts        # Debouncing utility
+
+prisma/
+├── schema.prisma             # Database schema
+├── migrations/               # Database migrations
+└── seed.ts                   # Seed data
+
+e2e/                          # Playwright E2E tests
+├── authorization.spec.ts     # Authorization tests (NEW)
+├── admin.spec.ts             # Admin workflow tests
+├── formular.spec.ts          # Form workflow tests
+└── user-management.spec.ts   # User management tests
+```
+
+## Authorization Implementation
+
+### Overview
+
+The application implements **row-level authorization** where users from the Schulamt can only see and manage forms they created. This prevents users from accessing or modifying forms created by other users.
+
+### Database Schema Changes
+
+Added `createdById` field to the `Form` model to track which user created each form:
+
+```prisma
+model Form {
+  // ... existing fields
+  createdById String?
+  createdBy   User?     @relation(fields: [createdById], references: [id])
+  // ... other fields
+  @@index([createdById])
+}
+
+model User {
+  // ... existing fields
+  forms     Form[]   // Forms created by this user
+}
+```
+
+**Migration**: `20251001081932_add_form_creator`
+
+### Authorization Layers
+
+#### 1. API Route Authorization
+
+All form-related API endpoints now check:
+1. **Authentication**: User must be logged in
+2. **Authorization**: User must be the creator of the form
+
+**Files modified:**
+- [src/app/api/forms/route.ts](src/app/api/forms/route.ts): Form creation now tracks `createdById`
+- [src/app/api/forms/[id]/approve/route.ts](src/app/api/forms/[id]/approve/route.ts): Approve only own forms
+- [src/app/api/forms/[id]/return/route.ts](src/app/api/forms/[id]/return/route.ts): Return only own forms
+- [src/app/api/forms/[id]/export/route.ts](src/app/api/forms/[id]/export/route.ts): Export only own forms
+
+**Example authorization pattern:**
+
+```typescript
+export async function POST(req: Request, context: { params: Promise<{ id: string }> }) {
+  // 1. Check authentication
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id } = await context.params;
+
+  // 2. Check authorization: user must be the creator
+  const form = await prisma.form.findUnique({
+    where: { id },
+    select: { createdById: true },
+  });
+
+  if (!form) {
+    return NextResponse.json({ error: "Form not found" }, { status: 404 });
+  }
+
+  if (form.createdById !== currentUser.id) {
+    return NextResponse.json(
+      { error: "Forbidden: You can only modify forms you created" },
+      { status: 403 }
+    );
+  }
+
+  // 3. Proceed with the operation
+  // ...
+}
+```
+
+#### 2. Page-Level Authorization
+
+**Admin List Page** ([src/app/admin/page.tsx](src/app/admin/page.tsx)):
+- Filters forms to show only those created by the current user
+- Query: `where: { createdById: currentUser.id }`
+
+**Form Detail Page** ([src/app/admin/forms/[id]/page.tsx](src/app/admin/forms/[id]/page.tsx)):
+- Checks if user is the creator before rendering
+- Redirects to `/admin` if not authorized
+
+```typescript
+// Authorization check in page component
+const currentUser = await getCurrentUser();
+if (!currentUser) {
+  redirect("/login");
+}
+
+const form = await prisma.form.findUnique({ where: { id } });
+
+if (!form) {
+  redirect("/admin");
+}
+
+// Only allow access if user created this form
+if (form.createdById !== currentUser.id) {
+  redirect("/admin");
+}
+```
+
+### Authentication Helpers
+
+Located in [src/lib/auth.ts](src/lib/auth.ts):
+
+```typescript
+// Check if user is authenticated
+export async function isAuthenticated(): Promise<boolean>
+
+// Get current user details
+export async function getCurrentUser()
+
+// Check if user is superadmin
+export async function isSuperAdmin(): Promise<boolean>
+
+// Check if user is admin or superadmin
+export async function isAdmin(): Promise<boolean>
+```
+
+### User Roles
+
+**SUPERADMIN**:
+- Access: User management only
+- Cannot see or manage forms
+- Redirected to `/admin/users`
+
+**ADMIN**:
+- Access: Form management
+- Can only see/manage their own forms
+- No access to user management
+
+## Security Considerations
+
+### What's Protected
+
+✅ **Form Creation**: Only authenticated users can create forms (tracked with `createdById`)
+✅ **Form List**: Users only see their own forms in the admin dashboard
+✅ **Form Details**: Access denied if user is not the creator
+✅ **Form Actions**: Approve, return, export, and delete only work for form creator
+✅ **API Endpoints**: All form APIs check authentication and authorization
+
+### What's Public
+
+- Form access by code: Schools can access forms via access code (no user account needed)
+- Completed forms: Can be viewed with school number + access code combination
+
+## Testing
+
+### E2E Tests for Authorization
+
+New test file: [e2e/authorization.spec.ts](e2e/authorization.spec.ts)
+
+**Test Coverage:**
+1. ✅ Admin users only see their own forms
+2. ✅ Direct URL access to other user's forms is blocked
+3. ✅ Unauthorized API requests return 401
+4. ✅ Cross-user API access returns 403
+5. ✅ Form creators can approve their own forms
+6. ✅ Export only works for form creator
+
+**Run tests:**
+```bash
+npm run test:e2e                # Run all tests
+npm run test:e2e:ui             # Run with UI
+npm run test:e2e -- authorization.spec.ts  # Run authorization tests only
+```
+
+## Database Migration Status
+
+- ✅ Migration created: `20251001081932_add_form_creator`
+- ✅ Schema updated with `createdById` field
+- ✅ Index added for performance: `@@index([createdById])`
+- ⚠️ **Note**: Existing forms have `createdById: null` (created before migration)
+
+### Handling Legacy Forms
+
+Forms created before the authorization implementation have `createdById: null`. Options:
+
+1. **Assign to a default admin** (recommended for small datasets):
+   ```sql
+   UPDATE Form SET createdById = '<admin-user-id>' WHERE createdById IS NULL;
+   ```
+
+2. **Delete legacy forms** (if test data):
+   ```sql
+   DELETE FROM Form WHERE createdById IS NULL;
+   ```
+
+3. **Keep as-is**: These forms won't be visible to any user (filtered out)
+
+## API Response Codes
+
+| Code | Meaning | When |
+|------|---------|------|
+| 200 | Success | Request completed successfully |
+| 401 | Unauthorized | User not authenticated (no valid session) |
+| 403 | Forbidden | User authenticated but not authorized (not form creator) |
+| 404 | Not Found | Form doesn't exist |
+
+## Development Workflow
+
+### Local Development
+```bash
+# Install dependencies
+npm install
+
+# Generate Prisma client
+npx prisma generate
+
+# Run migrations
+npx prisma migrate dev
+
+# Seed database
+npx prisma db seed
+
+# Start dev server
+npm run dev
+```
+
+### Making Schema Changes
+```bash
+# 1. Edit prisma/schema.prisma
+# 2. Create migration
+npx prisma migrate dev --name descriptive_name
+
+# 3. Regenerate Prisma client
+npx prisma generate
+
+# 4. Update TypeScript code
+```
+
+## Key Files Reference
+
+### Authentication & Authorization
+- [src/lib/auth.ts](src/lib/auth.ts:1) - Auth helpers
+- [src/app/api/auth/login/route.ts](src/app/api/auth/login/route.ts) - Login endpoint
+- [src/app/api/auth/logout/route.ts](src/app/api/auth/logout/route.ts) - Logout endpoint
+
+### Form Management
+- [src/app/admin/page.tsx](src/app/admin/page.tsx:42) - Admin dashboard with authorization filter
+- [src/app/admin/forms/[id]/page.tsx](src/app/admin/forms/[id]/page.tsx:27) - Form detail page with auth check
+- [src/app/api/forms/route.ts](src/app/api/forms/route.ts:6) - Form creation API
+- [src/app/api/forms/[id]/approve/route.ts](src/app/api/forms/[id]/approve/route.ts:5) - Approve form API
+- [src/app/api/forms/[id]/return/route.ts](src/app/api/forms/[id]/return/route.ts:5) - Return form API
+- [src/app/api/forms/[id]/export/route.ts](src/app/api/forms/[id]/export/route.ts:18) - Export form API
+
+### Database
+- [prisma/schema.prisma](prisma/schema.prisma:49) - Form model with createdById
+- [prisma/schema.prisma](prisma/schema.prisma:189) - User model with forms relation
+
+### Tests
+- [e2e/authorization.spec.ts](e2e/authorization.spec.ts) - Authorization E2E tests
+
+### Privacy & Compliance
+- [src/app/datenschutz/page.tsx](src/app/datenschutz/page.tsx) - Privacy policy (GDPR compliant)
+
+## Common Tasks
+
+### Create a new user
+```bash
+# Use Prisma Studio
+npx prisma studio
+
+# Or via seed script
+npm run seed
+```
+
+### Reset database
+```bash
+rm prisma/dev.db
+npx prisma migrate dev
+npx prisma db seed
+```
+
+### View logs
+Check console output for authorization logs:
+- Form creation: Logs creator email
+- Form approval: Logs approver email
+- Form return: Logs user email and message
+
+## Future Improvements
+
+1. **Team-based access**: Allow users to be part of teams and share forms
+2. **Admin override**: Allow SUPERADMIN to view/manage all forms
+3. **Audit logging**: Track who accessed/modified which forms
+4. **Soft delete**: Keep deleted forms for audit purposes
+5. **Migration script**: Assign legacy forms to a default user
+
+## Data Privacy & GDPR Compliance
+
+### Privacy Policy Updates
+
+The privacy policy ([src/app/datenschutz/page.tsx](src/app/datenschutz/page.tsx)) has been updated to reflect the authorization implementation:
+
+**Key Changes (October 2025):**
+- **Section 3 - Data Processing Purpose**: Added user-ID for form assignment and audit logging
+- **Section 5 - Storage Duration**: Added storage duration for user-form assignments
+- **Section 6 - Data Recipients**: Added "Zugriffsbeschränkung" notice explaining row-level authorization
+- **Section 9 - Security Measures**: Extended technical (RBAC, row-level authorization) and organizational measures
+- **Section 10 - Cookies**: Detailed cookie usage (`auth-token`, `user-id`) with legal basis
+- **Section 11 - Change History**: Documented authorization implementation changes
+
+**Legal Compliance:**
+- ✅ Art. 6 Abs. 1 lit. e DSGVO (public task performance)
+- ✅ Art. 13-14 DSGVO (transparency requirements)
+- ✅ DSG NRW (Data Protection Act NRW)
+- ✅ Schulgesetz NRW (School Law NRW)
+
+**Technical Measures Documented:**
+- HTTPS/TLS encryption
+- Bcrypt password hashing (Argon2 recommended for future)
+- Cookie-based session authentication
+- Role-based access control (RBAC)
+- **Row-level authorization** ✨ (new)
+- Audit logging for form operations ✨ (new)
+- Regular security updates
+- Backup systems
+
+**Organizational Measures Documented:**
+- User management with role separation (ADMIN/SUPERADMIN)
+- Access logging for form creation and modification
+- Security training for Schulamt staff
+- Regular security audits
+- Incident response processes
+
+**Cookie Disclosure:**
+| Cookie | Purpose | Duration | Legal Basis |
+|--------|---------|----------|-------------|
+| `auth-token` | Authentication status | Until logout | Art. 6(1)(e) DSGVO |
+| `user-id` | Authorization checks | Until logout | Art. 6(1)(e) DSGVO |
+
+## Notes
+
+- Schools access forms via access codes (no authentication required)
+- User authentication is cookie-based (stored in browser)
+- Cookies used: `auth-token` (authentication), `user-id` (authorization)
+- All timestamps use ISO 8601 format
+- Form status workflow: DRAFT → SUBMITTED → APPROVED/RETURNED
+- Notifications are created when forms are submitted, approved, or returned
+- **Privacy policy updated**: October 2025 (authorization changes documented)

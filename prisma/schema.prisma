@@ -1,0 +1,208 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Domain enums
+enum FormStatus {
+  DRAFT
+  SUBMITTED
+  RETURNED
+  APPROVED
+  ARCHIVED
+}
+
+enum ActorRole {
+  SCHULAMT
+  SCHULE
+  SYSTEM
+}
+
+enum UserRole {
+  SUPERADMIN
+  ADMIN
+}
+
+model School {
+  id         String  @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // External reference from JedeSchule dataset
+  externalId String   @unique
+  schoolNumber String? // Schulnummer für Verifizierung
+  name       String
+  address    String?
+  city       String?
+  state      String?
+
+  forms      Form[]
+}
+
+model Form {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  schoolId    String
+  school      School    @relation(fields: [schoolId], references: [id])
+
+  // Track which user created this form
+  createdById String?
+  createdBy   User?     @relation(fields: [createdById], references: [id])
+
+  // Versioning
+  version     Int       @default(1)
+  schoolYear  String?   // e.g., "2024/25" - Schuljahr der Zielvereinbarung
+
+  status      FormStatus @default(DRAFT)
+  title       String?
+  date        DateTime?  // Zielvereinbarung date
+  submittedAt DateTime?
+  approvedAt  DateTime?
+
+  accessCode     AccessCode?
+  comments       Comment[]
+  entries        Entry[]    // List of entries (each with 8 properties)
+  notifications  Notification[]
+
+  @@index([schoolId])
+  @@index([schoolId, version])
+  @@index([createdById])
+}
+
+model Entry {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  formId      String
+  form        Form      @relation(fields: [formId], references: [id], onDelete: Cascade)
+
+  // Entry title (required)
+  title       String    @default("")
+
+  // Property 1: Zielsetzungen und Zielbereiche
+  zielsetzungenText String?
+  zielbereich1      Json?  // Array of selected options
+  zielbereich2      Json?  // Array of selected options
+  zielbereich3      Json?  // Array of selected options (RRSQ)
+
+  // Property 2: Datengrundlage
+  datengrundlage       Json?  // Array of selected data sources
+  datengrundlageAndere String?
+
+  // Property 3: Zielgruppe der Maßnahme
+  zielgruppe          Json?  // Array of selected target groups
+  zielgruppeSusDetail String?
+
+  // Property 4: (Datengestützte) Maßnahme(n) zur Zielerreichung
+  massnahmen String?
+
+  // Property 5: Indikatoren
+  indikatoren String?
+
+  // Property 6: Verantwortliche / beteiligte Person(en)
+  verantwortlich String?
+  beteiligt      String?
+
+  // Property 7: Beginn und Ende der Maßnahme
+  beginnSchuljahr String?  // e.g., "2026/27"
+  beginnHalbjahr  Int?      // 1 = erstes Halbjahr, 2 = zweites Halbjahr
+  endeSchuljahr   String?   // e.g., "2027/28"
+  endeHalbjahr    Int?      // 1 = erstes Halbjahr, 2 = zweites Halbjahr
+
+  // Property 8: Unterstützung durch Fortbildung
+  fortbildungJa         Boolean @default(false)
+  fortbildungThemen     String?
+  fortbildungZielgruppe String?
+
+  @@index([formId])
+}
+
+model AccessCode {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  // One active access code per form for now
+  formId    String   @unique
+  form      Form     @relation(fields: [formId], references: [id])
+  expiresAt DateTime?
+  usedAt    DateTime?
+}
+
+model Comment {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  formId     String
+  form       Form      @relation(fields: [formId], references: [id])
+
+  authorRole ActorRole
+  authorName String?
+  message    String
+  resolved   Boolean   @default(false)
+
+  @@index([formId])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  
+  @@index([email])
+  @@index([token])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  
+  type      String   // "FORM_SUBMITTED", "FORM_RETURNED", "COMMENT_ADDED"
+  message   String
+  read      Boolean  @default(false)
+  readAt    DateTime?
+  
+  formId    String
+  form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  
+  // Optional: track who should see this notification
+  targetRole ActorRole @default(SCHULAMT)
+  
+  @@index([formId])
+  @@index([read])
+  @@index([createdAt])
+}
+
+model User {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email     String   @unique
+  password  String   // Bcrypt hashed
+  role      UserRole @default(ADMIN)
+
+  name      String?  // Display name (optional)
+  active    Boolean  @default(true)
+
+  lastLoginAt DateTime?
+
+  forms     Form[]   // Forms created by this user
+
+  @@index([email])
+  @@index([role])
+}
