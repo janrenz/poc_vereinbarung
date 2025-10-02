@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { LogIn, AlertCircle } from "lucide-react";
 
@@ -135,6 +136,27 @@ export function LoginForm() {
           >
             {loading ? "Anmelden..." : "Anmelden"}
           </motion.button>
+
+          <div className="mt-4 text-center">
+            <Link
+              href="/forgot-password"
+              className="text-sm text-[var(--md-sys-color-primary)] hover:underline"
+            >
+              Passwort vergessen?
+            </Link>
+          </div>
+
+          <div className="mt-6 pt-6 border-t border-[var(--md-sys-color-outline-variant)] text-center">
+            <p className="text-sm text-[var(--md-sys-color-on-surface-variant)]">
+              Noch kein Konto?{" "}
+              <Link
+                href="/register"
+                className="text-[var(--md-sys-color-primary)] hover:underline font-medium"
+              >
+                Jetzt registrieren
+              </Link>
+            </p>
+          </div>
         </motion.form>
       </motion.div>
     </div>

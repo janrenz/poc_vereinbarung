@@ -34,6 +34,32 @@ npm run dev
 
 Siehe [DEPLOYMENT.md](./DEPLOYMENT.md) für detaillierte Anweisungen zum Deployment auf Vercel mit Vercel Postgres.
 
+## Email Configuration
+
+The application uses [Resend](https://resend.com) for sending emails. Email functionality is optional - without configuration, emails will be logged to the console in development mode.
+
+### Setting up Resend
+
+1. Create a free account at [resend.com](https://resend.com)
+2. Get your API key from the dashboard
+3. Add to your `.env` file:
+
+```bash
+RESEND_API_KEY=re_your_api_key_here
+FROM_EMAIL=noreply@yourdomain.com  # or use onboarding@resend.dev for testing
+SCHULAMT_EMAIL=admin@schulamt.example.com  # Email for form submission notifications
+```
+
+### Email Features
+
+The application sends emails for:
+- **Password Reset**: When users request to reset their password
+- **Form Submitted**: Notifies Schulamt when a school submits a form
+- **Form Approved**: Notifies school when their form is approved
+- **Form Returned**: Notifies school when their form needs revisions
+
+**Development Mode**: Without `RESEND_API_KEY`, all emails are logged to console for testing.
+
 ## User Management
 
 ### Creating the First Superadmin
@@ -78,6 +104,8 @@ After running `npm run dev`, you can login with these demo accounts:
 - Access: Form management + user management
 
 Login at: http://localhost:3000/login
+
+**Forgot Password?** Use the "Passwort vergessen?" link on the login page to request a password reset email.
 
 ### School Access Codes
 

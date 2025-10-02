@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { FormNavigation } from "@/components/FormNavigation";
 import { EntryFormWithAutosaveClient } from "@/components/EntryFormWithAutosaveClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditEntryPage({
   params,
 }: {

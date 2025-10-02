@@ -54,6 +54,8 @@ function calculatePosition(
 
 export function GanttChart({ entries, schoolName }: GanttChartProps) {
   const { validEntries, minYear, maxYear, years } = useMemo(() => {
+    // Filter entries that have timing data and a display title
+    // We prefer the explicit 'title' field, fallback to 'zielsetzungenText' for backwards compatibility
     const valid = entries.filter(
       (e) => e.beginnSchuljahr && e.endeSchuljahr && (e.title || e.zielsetzungenText)
     );
@@ -221,7 +223,7 @@ export function GanttChart({ entries, schoolName }: GanttChartProps) {
 
               return (
                 <div key={entry.id} className="flex items-center gap-4">
-                  {/* Entry Label */}
+                  {/* Entry Label - Uses explicit 'title' field (preferred) */}
                   <div className="w-[280px] flex-shrink-0">
                     <div className="text-sm font-medium text-[var(--md-sys-color-on-surface)] truncate pr-2">
                       {entry.title || entry.zielsetzungenText || "Ohne Titel"}

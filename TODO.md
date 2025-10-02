@@ -2,7 +2,7 @@
 
 ## 🔐 CRITICAL - Security (In Bearbeitung)
 
-### Abgeschlossen (Parts 1, 2 & 3 - 152/228 Stunden)
+### Abgeschlossen (Parts 1 & 2 - 70/228 Stunden)
 - ✅ Sichere Session-Verwaltung mit crypto-tokens
 - ✅ Audit-Logging-System für DSGVO
 - ✅ Rate-Limiting-Infrastruktur
@@ -12,25 +12,17 @@
 - ✅ Timing-Attack-Schutz im Login
 - ✅ Zod Input-Validierung
 - ✅ Secure Access-Code-Generierung (crypto.randomBytes)
-- ✅ Rate-Limiting auf ALLE API-Endpunkte (7 Endpunkte)
-- ✅ Input-Validierung in allen Endpunkten integriert
-- ✅ Audit-Logging in allen Operationen integriert
-- ✅ Build erfolgreich (alle TypeScript-Fehler behoben)
 
-### Offen (Part 4 - 76 Stunden)
+### Offen (Part 3 - 82 Stunden)
 - [ ] **KRITISCH:** Datenbank-Migration ausführen (`npx prisma migrate deploy`)
-- [ ] **KRITISCH:** `ACCESS_CODE_PEPPER` Environment Variable setzen (für Production)
-- [ ] **KRITISCH:** `CRON_SECRET` Environment Variable setzen (für Audit-Log-Cleanup)
-- [ ] Access-Code-Hashing in DB implementieren (codeHash Feld im Schema hinzufügen)
-- [ ] E2E-Tests für neue Auth aktualisieren (UserMenu, Logout)
-- [ ] Password-Reset-Flow absichern
+- [ ] Rate-Limiting auf alle API-Endpunkte anwenden
+- [ ] Input-Validierung in allen Endpunkten
+- [ ] Audit-Logging überall integrieren
+- [ ] Fehlermeldungen sanitieren
+- [ ] Access-Codes in DB hashen
+- [ ] DSGVO Daten-Export-Endpunkt
+- [ ] E2E-Tests für neue Auth aktualisieren
 - [ ] Penetration-Testing
-
-### Abgeschlossen (Part 4 - Phase 1)
-- ✅ Fehlermeldungen sanitieren (keine Stack-Traces in Production) - `/src/lib/error-handler.ts`
-- ✅ Access-Code-Hashing Migration Script - `/scripts/hash-access-codes.ts`
-- ✅ DSGVO Daten-Export-Endpunkt - `/api/users/[id]/export`
-- ✅ Audit-Log-Cleanup nach 90 Tagen - `/src/lib/audit-cleanup.ts` + Vercel Cron
 
 **Siehe:** `SECURITY_IMPLEMENTATION_STATUS.md` für Details
 
@@ -68,15 +60,18 @@
 - [ ] Textfelder sollten sich in der Größe anpassen so das der gesamte text zu sehen ist
 
 #### Bugs
-- ✅ Gantt diagramm wird nicht angezeigt - Fixed: Filter jetzt auf title + zielsetzungenText
-- ✅ Admin forms Detail Ansicht - Fixed: Datengrundlage & Zielgruppe Labels hinzugefügt
-- ✅ Login-Status und Logout Button - Fixed: UserMenu-Component in Layout integriert
+- [ ] Gantt diagramm wird nicht angezeigt (keine Zeitdaten vorhanden) obwohl welche hinterlegt sind
+- [ ] in der Admin forms Detail Ansicht sind immer noch keys statt den beschriebungen / Labels 
+- [ ] es gibt keine anzeige vom Loginsttaus und kein Logout Button (bitte auhc e2e Tests hierfür)
 
 #### Datenschutz
-- ✅ Auditlogs werden nach 90 Tagen gelöscht - Cron-Job implementiert 
+- [ ] Auditlogs should be deleted after 90 days 
 
 #### Testing
 - [ ] check e2e tests for covering all areas and make sure they all are successful
+
+#### Other
+- [ ] Remove linter warnings
 ---
 
 ## In Bearbeitung

@@ -186,6 +186,19 @@ model PasswordResetToken {
   @@index([token])
 }
 
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  @@index([email])
+  @@index([token])
+}
+
 model AuditLog {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
@@ -236,8 +249,10 @@ model User {
   password  String   // Bcrypt hashed
   role      UserRole @default(ADMIN)
 
-  name      String?  // Display name (optional)
-  active    Boolean  @default(true)
+  name          String?  // Display name (optional)
+  schulamtName  String?  // Name of the Schulamt organization
+  active        Boolean  @default(true)
+  emailVerified Boolean  @default(false)
 
   lastLoginAt DateTime?
   failedLoginAttempts Int @default(0)

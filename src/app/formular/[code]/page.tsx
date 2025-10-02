@@ -10,6 +10,8 @@ import { getStatusLabel } from "@/lib/status-labels";
 import { createNotification } from "@/lib/notifications";
 import { sendEmail, getFormSubmittedEmail } from "@/lib/email";
 
+export const dynamic = "force-dynamic";
+
 export default async function FormByCodePage({ params }: { params: Promise<{ code: string }> }) {
   const { code: rawCode } = await params;
   const code = decodeURIComponent(rawCode).toUpperCase();
