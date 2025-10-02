@@ -50,16 +50,16 @@ export const ZIELBEREICH_3_LABELS: Record<string, string> = {
 };
 
 export const DATENGRUNDLAGE_LABELS: Record<string, string> = {
-  lernstand: "Lernstandserhebungen",
-  vergleichsarbeiten: "Vergleichsarbeiten",
-  klassenarbeiten: "Klassenarbeiten / Klausuren",
-  zentrale_pruefungen: "Zentrale Prüfungen",
-  selbstevaluation: "Selbstevaluation",
-  fremdevaluation: "Fremdevaluation (z.B. Qualitätsanalyse)",
-  schulstatistik: "Schulstatistik (z.B. Wiederholerquote, Abschlüsse)",
-  befragungen: "Befragungen (Schüler, Eltern, Lehrkräfte)",
-  unterrichtsbeobachtung: "Unterrichtsbeobachtung",
-  sonstige: "Sonstige Datenquellen",
+  vera: "VERA/Lernstandserhebungen",
+  zp: "Zentrale Prüfungen",
+  abitur: "Abitur",
+  interne_eval: "Interne Evaluationen",
+  schulinspekt: "Schulinspektion/Qualitätsanalyse",
+  lehrerbefragung: "Lehrerbefragungen",
+  sus_befragung: "Schülerbefragungen",
+  eltern_befragung: "Elternbefragungen",
+  klassenarbeiten: "Klassenarbeiten/Tests",
+  beobachtung: "Unterrichtsbeobachtungen",
 };
 
 export const ZIELGRUPPE_LABELS: Record<string, string> = {
