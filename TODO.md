@@ -13,16 +13,30 @@
 - ✅ Zod Input-Validierung
 - ✅ Secure Access-Code-Generierung (crypto.randomBytes)
 
-### Offen (Part 3 - 82 Stunden)
-- [ ] **KRITISCH:** Datenbank-Migration ausführen (`npx prisma migrate deploy`)
-- [ ] Rate-Limiting auf alle API-Endpunkte anwenden
-- [ ] Input-Validierung in allen Endpunkten
-- [ ] Audit-Logging überall integrieren
-- [ ] Fehlermeldungen sanitieren
-- [ ] Access-Codes in DB hashen
-- [ ] DSGVO Daten-Export-Endpunkt
-- [ ] E2E-Tests für neue Auth aktualisieren
-- [ ] Penetration-Testing
+### Abgeschlossen (Part 4 - 228/228 Stunden) ✅
+- ✅ Passwort-Reset-Funktionalität mit E-Mail-Verifizierung
+- ✅ Benutzer-Registrierung für Schulamt-Mitarbeiter
+- ✅ E-Mail-Integration mit Resend API
+- ✅ E-Mail-Verifizierung mit 24h-Tokens
+- ✅ Rate-Limiting auf allen Auth-Endpunkten
+- ✅ Zod-Validierung für alle Auth-Flows
+- ✅ User-Enumeration-Schutz
+- ✅ Umfassende E2E-Tests (40+ Tests für Auth-Flows)
+- ✅ DSGVO-konforme Audit-Logs
+
+### Offen (Part 5 - 82 Stunden)
+- [ ] **KRITISCH:** Datenbank-Migration ausführen (`npx prisma migrate dev`)
+  * Fügt `emailVerified` Boolean zu User hinzu
+  * Fügt `schulamtName` String zu User hinzu
+  * Erstellt `EmailVerificationToken` Tabelle
+- [ ] Rate-Limiting auf REST API-Endpunkte anwenden (Forms, Entries, Schools)
+- [ ] Input-Validierung in allen nicht-Auth Endpunkten
+- [ ] Audit-Logging in allen API-Endpunkten integrieren
+- [ ] Fehlermeldungen in allen Endpunkten sanitieren
+- [ ] Access-Codes in DB hashen (aktuell plain text)
+- [ ] DSGVO Daten-Export-Endpunkt für Benutzer
+- [ ] E2E-Tests mit Datenbank ausführen (aktuell benötigt PostgreSQL)
+- [ ] Penetration-Testing mit OWASP ZAP
 
 **Siehe:** `SECURITY_IMPLEMENTATION_STATUS.md` für Details
 
@@ -106,4 +120,9 @@
 - ✅ Passwort-Komplexität erzwungen
 - ✅ Audit-Logging-System
 - ✅ Security-Headers (HSTS, CSP, etc.)
+- ✅ Passwort-Reset mit E-Mail-Verifizierung
+- ✅ Benutzer-Registrierung mit E-Mail-Bestätigung
+- ✅ User-Enumeration-Schutz (Forgot Password)
+- ✅ Token-basierte E-Mail-Verifizierung
+- ✅ 40+ E2E-Tests für Auth-Flows (Registrierung, Login, Password Reset)
 
