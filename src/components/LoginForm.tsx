@@ -148,6 +148,18 @@ export function LoginForm() {
               Passwort vergessen?
             </Link>
           </div>
+
+          <div className="mt-6 pt-6 border-t border-[var(--md-sys-color-outline-variant)] text-center">
+            <p className="text-sm text-[var(--md-sys-color-on-surface-variant)]">
+              Noch kein Konto?{" "}
+              <Link
+                href="/register"
+                className="text-[var(--md-sys-color-primary)] hover:underline font-medium"
+              >
+                Jetzt registrieren
+              </Link>
+            </p>
+          </div>
         </motion.form>
       </motion.div>
     </div>

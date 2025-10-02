@@ -137,6 +137,16 @@ export const ResetPasswordSchema = z.object({
 });
 
 /**
+ * Registration validation
+ */
+export const RegisterSchema = z.object({
+  name: z.string().min(1, "Name ist erforderlich").max(255),
+  schulamtName: z.string().min(1, "Schulamt Name ist erforderlich").max(255),
+  email: EmailSchema,
+  password: PasswordSchema,
+});
+
+/**
  * Format Zod errors for API responses
  */
 export function formatZodErrors<T>(error: z.ZodError<T>): {
