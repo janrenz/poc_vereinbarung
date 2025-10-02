@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 import { logAudit } from "@/lib/audit";
+import { ResetPasswordSchema, formatZodErrors } from "@/lib/validation";
 import bcrypt from "bcryptjs";
 
 export async function POST(req: NextRequest) {
@@ -18,21 +19,20 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { token, password } = body;
 
-    if (!token || !password) {
+    // Validate input
+    const validation = ResetPasswordSchema.safeParse(body);
+    if (!validation.success) {
       return NextResponse.json(
-        { error: "Token und Passwort sind erforderlich." },
+        {
+          error: "Ungültige Eingabe",
+          details: formatZodErrors(validation.error),
+        },
         { status: 400 }
       );
     }
 
-    if (password.length < 12) {
-      return NextResponse.json(
-        { error: "Das Passwort muss mindestens 12 Zeichen lang sein." },
-        { status: 400 }
-      );
-    }
+    const { token, password } = validation.data;
 
     // Find reset token
     const resetToken = await prisma.passwordResetToken.findUnique({

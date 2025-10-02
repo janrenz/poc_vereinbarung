@@ -63,6 +63,9 @@ export function LoginForm() {
           <p className="mt-2 text-[var(--md-sys-color-on-primary-container)] opacity-90">
             Melden Sie sich an, um auf den Admin-Bereich zuzugreifen
           </p>
+          <p className="mt-3 text-sm text-[var(--md-sys-color-on-primary-container)] opacity-75">
+            💡 Als Schule benötigen Sie keinen Account – nutzen Sie Ihren Zugangscode
+          </p>
         </div>
 
         <motion.form

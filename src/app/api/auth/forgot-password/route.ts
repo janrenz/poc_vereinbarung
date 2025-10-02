@@ -4,6 +4,7 @@ import { rateLimit } from "@/lib/rate-limit";
 import { sendEmail, getPasswordResetEmail } from "@/lib/email";
 import crypto from "crypto";
 import { logAudit } from "@/lib/audit";
+import { ForgotPasswordSchema, formatZodErrors } from "@/lib/validation";
 
 export async function POST(req: NextRequest) {
   // Rate limiting
@@ -19,14 +20,20 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { email } = body;
 
-    if (!email || typeof email !== "string") {
+    // Validate input
+    const validation = ForgotPasswordSchema.safeParse(body);
+    if (!validation.success) {
       return NextResponse.json(
-        { error: "E-Mail-Adresse ist erforderlich." },
+        {
+          error: "Ungültige Eingabe",
+          details: formatZodErrors(validation.error),
+        },
         { status: 400 }
       );
     }
+
+    const { email } = validation.data;
 
     // Always return success to prevent user enumeration
     // But only send email if user exists

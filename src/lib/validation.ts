@@ -122,6 +122,21 @@ export function validate<T>(schema: z.ZodSchema<T>, data: unknown): {
 }
 
 /**
+ * Password reset request validation
+ */
+export const ForgotPasswordSchema = z.object({
+  email: EmailSchema,
+});
+
+/**
+ * Password reset validation
+ */
+export const ResetPasswordSchema = z.object({
+  token: z.string().min(1, "Token is required"),
+  password: PasswordSchema,
+});
+
+/**
  * Format Zod errors for API responses
  */
 export function formatZodErrors<T>(error: z.ZodError<T>): {

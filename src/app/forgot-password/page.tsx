@@ -112,6 +112,13 @@ export default function ForgotPasswordPage() {
             </p>
           </div>
 
+          <div className="rounded-[var(--md-sys-shape-corner-medium)] bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)] p-4">
+            <p className="text-sm">
+              <strong>💡 Hinweis für Schulen:</strong> Diese Funktion ist nur für Schulamt-Mitarbeiter.
+              Als Schule benötigen Sie keinen Account – verwenden Sie einfach den Zugangscode, den Sie von Ihrem Schulamt erhalten haben.
+            </p>
+          </div>
+
           {error && (
             <div className="rounded-[var(--md-sys-shape-corner-medium)] bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)] p-4">
               <p className="text-sm">{error}</p>
