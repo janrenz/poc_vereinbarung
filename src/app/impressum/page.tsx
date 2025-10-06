@@ -157,16 +157,7 @@ export default function ImpressumPage() {
                 </p>
               </div>
 
-              <div>
-                <h3 className="font-semibold mb-2">Urheberrecht</h3>
-                <p className="text-[var(--md-sys-color-on-surface-variant)]">
-                  Der Autor ist bestrebt, in allen Publikationen die Urheberrechte der
-                  verwendeten Grafiken, Tondokumente, Videosequenzen und Texte zu
-                  beachten, von ihm selbst erstellte Grafiken, Tondokumente,
-                  Videosequenzen und Texte zu nutzen oder auf lizenzfreie Grafiken,
-                  Tondokumente, Videosequenzen und Texte zurückzugreifen.
-                </p>
-              </div>
+             
             </div>
           </section>
 
