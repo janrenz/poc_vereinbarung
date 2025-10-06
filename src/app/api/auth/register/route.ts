@@ -107,6 +107,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error("[REGISTER] Error:", error);
+    console.error("[REGISTER] Error stack:", error instanceof Error ? error.stack : "No stack");
 
     await logAudit({
       action: "USER_CREATED",
@@ -117,7 +118,7 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(
-      { error: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut." },
+      { error: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.", debug: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }
