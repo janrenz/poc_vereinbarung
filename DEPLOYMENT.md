@@ -1,5 +1,22 @@
 # Deployment auf Vercel mit PostgreSQL
 
+## ⚠️ WICHTIG: Aktuelle Datenbank-Migration (2025-10-06)
+
+**Nach den letzten Änderungen wurde die Terminologie von "Schulamt" zu "Schulaufsicht" korrigiert.**
+
+### Wenn Sie bereits eine Production-Datenbank haben:
+
+Die folgende Migration muss automatisch beim nächsten Deployment ausgeführt werden:
+- `20251006120000_rename_schulamt_to_schulaufsicht`
+
+Diese Migration ist **idempotent** und kann sicher mehrfach ausgeführt werden. Sie umbenennt:
+- Enum-Wert: `ActorRole.SCHULAMT` → `ActorRole.SCHULAUFSICHT`
+- Spalte: `User.schulamtName` → `User.schulaufsichtName`
+
+**Die Migration wird automatisch durch `npx prisma migrate deploy` im Build-Prozess ausgeführt.**
+
+---
+
 Diese Anleitung erklärt, wie Sie die Zielvereinbarung Digital App auf Vercel mit Vercel Postgres deployen.
 
 ## Voraussetzungen
