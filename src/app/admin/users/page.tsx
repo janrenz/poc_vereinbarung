@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "@/components/Link";
 import { ArrowLeft, UserPlus, Shield, User, Mail, Calendar, CheckCircle, XCircle, FileText } from "lucide-react";
 import bcrypt from "bcryptjs";
+import { DeleteUserButton } from "@/components/DeleteUserButton";
 
 export const dynamic = "force-dynamic";
 
@@ -265,19 +266,11 @@ export default async function UsersManagementPage() {
                         {user.active ? "Deaktivieren" : "Aktivieren"}
                       </button>
                     </form>
-                    <form action={deleteUser.bind(null, user.id)}>
-                      <button
-                        type="submit"
-                        className="rounded-[var(--md-sys-shape-corner-full)] border-2 border-[var(--md-sys-color-error)] text-[var(--md-sys-color-error)] px-4 py-2 text-sm font-medium hover:bg-[var(--md-sys-color-error-container)] transition-all"
-                        onClick={(e) => {
-                          if (!confirm(`Benutzer "${user.email}" wirklich löschen?`)) {
-                            e.preventDefault();
-                          }
-                        }}
-                      >
-                        Löschen
-                      </button>
-                    </form>
+                    <DeleteUserButton
+                      userId={user.id}
+                      userEmail={user.email}
+                      deleteAction={deleteUser}
+                    />
                   </div>
                 </div>
               </div>
