@@ -41,7 +41,7 @@ export default async function FormByCodePage({ params }: { params: Promise<{ cod
     "use server";
     const updatedForm = await prisma.form.update({
       where: { id: form.id },
-      data: { 
+      data: {
         status: "SUBMITTED",
         submittedAt: new Date()
       },
@@ -67,6 +67,25 @@ export default async function FormByCodePage({ params }: { params: Promise<{ cod
       to: schulaufsichtEmail,
       subject: emailContent.subject,
       html: emailContent.html,
+    });
+
+    redirect(`/formular/${code}`);
+  }
+
+  async function deleteEntry(entryId: string) {
+    "use server";
+    // Verify that the entry belongs to this form
+    const entry = await prisma.entry.findUnique({
+      where: { id: entryId },
+      select: { formId: true },
+    });
+
+    if (!entry || entry.formId !== form.id) {
+      throw new Error("Entry not found or access denied");
+    }
+
+    await prisma.entry.delete({
+      where: { id: entryId },
     });
 
     redirect(`/formular/${code}`);
@@ -149,7 +168,7 @@ export default async function FormByCodePage({ params }: { params: Promise<{ cod
           </Link>
         </div>
 
-        <EntryListClient entries={form.entries} code={code} />
+        <EntryListClient entries={form.entries} code={code} deleteEntry={deleteEntry} />
       </div>
 
       {/* Gantt Chart */}

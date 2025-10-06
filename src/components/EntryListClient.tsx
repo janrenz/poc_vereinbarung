@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "@/components/Link";
 import { EntrySortControls, type SortConfig } from "./EntrySortControls";
+import { DeleteEntryButton } from "./DeleteEntryButton";
 
 type Entry = {
   id: string;
@@ -19,6 +20,7 @@ type Entry = {
 type Props = {
   entries: Entry[];
   code: string;
+  deleteEntry: (entryId: string) => void;
 };
 
 function parseSchuljahr(jahr: string | null): number {
@@ -34,7 +36,7 @@ function getTimelineValue(entry: Entry): number {
   return year + semester;
 }
 
-export function EntryListClient({ entries, code }: Props) {
+export function EntryListClient({ entries, code, deleteEntry }: Props) {
   const [sortConfig, setSortConfig] = useState<SortConfig>({
     field: "created",
     direction: "asc",
@@ -112,6 +114,11 @@ export function EntryListClient({ entries, code }: Props) {
                 >
                   Bearbeiten
                 </Link>
+                <DeleteEntryButton
+                  entryId={entry.id}
+                  entryTitle={entry.title}
+                  deleteAction={deleteEntry}
+                />
               </div>
             </div>
           ))}
