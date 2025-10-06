@@ -69,6 +69,23 @@ export default async function UsersManagementPage() {
     redirect("/admin/users");
   }
 
+  async function changeUserRole(userId: string, newRole: "SUPERADMIN" | "ADMIN") {
+    "use server";
+    const currentUser = await getCurrentUser();
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { role: newRole },
+    });
+
+    // If user changed their own role from SUPERADMIN to ADMIN, redirect to admin page
+    if (currentUser?.id === userId && newRole === "ADMIN") {
+      redirect("/admin");
+    } else {
+      redirect("/admin/users");
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -253,7 +270,15 @@ export default async function UsersManagementPage() {
                     </div>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
+                    <form action={changeUserRole.bind(null, user.id, user.role === "SUPERADMIN" ? "ADMIN" : "SUPERADMIN")}>
+                      <button
+                        type="submit"
+                        className="rounded-[var(--md-sys-shape-corner-full)] border-2 border-[var(--md-sys-color-outline)] text-[var(--md-sys-color-on-surface)] px-4 py-2 text-sm font-medium hover:bg-[var(--md-sys-color-surface-variant)] transition-all"
+                      >
+                        {user.role === "SUPERADMIN" ? "→ Admin" : "→ Superadmin"}
+                      </button>
+                    </form>
                     <form action={toggleUserStatus.bind(null, user.id, user.active)}>
                       <button
                         type="submit"
