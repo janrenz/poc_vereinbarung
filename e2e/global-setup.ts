@@ -30,6 +30,7 @@ async function globalSetup() {
         name: 'Demo Admin',
         role: 'ADMIN',
         active: true,
+        emailVerified: true,
       },
     });
 
@@ -41,6 +42,7 @@ async function globalSetup() {
         name: 'Demo Superadmin',
         role: 'SUPERADMIN',
         active: true,
+        emailVerified: true,
       },
     });
 
@@ -52,6 +54,7 @@ async function globalSetup() {
         name: 'Schulamt Test User',
         role: 'ADMIN',
         active: true,
+        emailVerified: true,
       },
     });
 

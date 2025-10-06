@@ -39,7 +39,7 @@ export async function createSession(
   cookieStore.set("session-token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict", // Changed from "lax" for better CSRF protection
+    sameSite: "lax", // "lax" allows cookies on top-level navigation (login redirects)
     maxAge: SESSION_DURATION / 1000,
     path: "/",
   });

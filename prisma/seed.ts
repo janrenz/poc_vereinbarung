@@ -14,29 +14,61 @@ async function main() {
 
   const admin = await prisma.user.upsert({
     where: { email: adminEmail },
-    update: {},
+    update: {
+      password: hashedAdminPassword,
+      active: true,
+      emailVerified: true,
+    },
     create: {
       email: adminEmail,
       password: hashedAdminPassword,
       name: 'Admin',
       role: 'ADMIN',
       active: true,
+      emailVerified: true,
     },
   });
   console.log('✓ Admin created:', admin.email);
 
-  // Create demo superadmin (only in development)
+  // Create demo users (only in development)
   if (process.env.NODE_ENV !== 'production') {
+    // Demo admin user for testing
+    const demoAdminPassword = await bcrypt.hash('schulamt123', 12);
+    const demoAdmin = await prisma.user.upsert({
+      where: { email: 'schulamt@example.com' },
+      update: {
+        password: demoAdminPassword,
+        active: true,
+        emailVerified: true,
+      },
+      create: {
+        email: 'schulamt@example.com',
+        password: demoAdminPassword,
+        name: 'Demo Schulamt',
+        schulamtName: 'Schulamt Musterstadt',
+        role: 'ADMIN',
+        active: true,
+        emailVerified: true,
+      },
+    });
+    console.log('✓ Demo Admin created:', demoAdmin.email);
+
+    // Demo superadmin
     const demoSuperadminPassword = await bcrypt.hash('superadmin123', 12);
     const demoSuperadmin = await prisma.user.upsert({
       where: { email: 'superadmin@schulamt.nrw' },
-      update: {},
+      update: {
+        password: demoSuperadminPassword,
+        active: true,
+        emailVerified: true,
+      },
       create: {
         email: 'superadmin@schulamt.nrw',
         password: demoSuperadminPassword,
         name: 'Demo Superadmin',
         role: 'SUPERADMIN',
         active: true,
+        emailVerified: true,
       },
     });
     console.log('✓ Demo Superadmin created:', demoSuperadmin.email);
