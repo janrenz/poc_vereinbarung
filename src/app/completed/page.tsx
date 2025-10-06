@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { FileCheck, Search, AlertCircle } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/Link";
 
 export default function CompletedFormsPage() {
   const [schoolNumber, setSchoolNumber] = useState("");

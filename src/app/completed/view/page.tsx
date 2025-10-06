@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/Link";
 import { ArrowLeft, FileCheck, Download, Calendar, CheckCircle } from "lucide-react";
 import { PDFDownloadButton } from "@/components/PDFDownloadButton";
 import { GanttChart } from "@/components/GanttChart";

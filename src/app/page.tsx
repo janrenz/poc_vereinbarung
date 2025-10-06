@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/Link";
 import { motion } from "framer-motion";
 import { School, Building2, FileCheck, ArrowRight, Sparkles } from "lucide-react";
 

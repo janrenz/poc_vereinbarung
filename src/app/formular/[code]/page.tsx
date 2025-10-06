@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/Link";
 import { FormNavigation } from "@/components/FormNavigation";
 import { GanttChart } from "@/components/GanttChart";
 import { EntryListClient } from "@/components/EntryListClient";

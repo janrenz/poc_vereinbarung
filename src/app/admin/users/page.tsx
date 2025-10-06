@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { isSuperAdmin, getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/Link";
 import { ArrowLeft, UserPlus, Shield, User, Mail, Calendar, CheckCircle, XCircle, FileText } from "lucide-react";
 import bcrypt from "bcryptjs";
 

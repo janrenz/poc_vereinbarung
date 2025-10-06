@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/Link";
 import { motion } from "framer-motion";
 import { ArrowLeft, UserPlus, CheckCircle2 } from "lucide-react";
 

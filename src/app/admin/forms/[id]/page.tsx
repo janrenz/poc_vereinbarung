@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { isAuthenticated, getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/Link";
 import { ArrowLeft, Calendar, School as SchoolIcon, CheckCircle2, XCircle, MessageSquare, FileText, Clock } from "lucide-react";
 import { GanttChart } from "@/components/GanttChart";
 import { CopyableCode } from "@/components/CopyableCode";

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/Link";
 import { ArrowLeft, Lock, CheckCircle2, AlertCircle } from "lucide-react";
 
 function ResetPasswordForm() {

@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { isAuthenticated, isSuperAdmin, getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/Link";
 import { SchoolSearchCreateClient } from "@/components/SchoolSearchCreateClient";
 import { CopyableCode } from "@/components/CopyableCode";
 import { CopyableLink } from "@/components/CopyableLink";

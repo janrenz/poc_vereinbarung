@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { isAuthenticated } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/Link";
 import { Bell, BellOff, Check, ArrowLeft, Clock, FileText } from "lucide-react";
 import { getStatusLabel, getStatusColor } from "@/lib/status-labels";
 import { markAsRead, markAllAsRead } from "@/lib/notifications";

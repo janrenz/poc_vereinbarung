@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/Link";
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 function VerifyEmailContent() {

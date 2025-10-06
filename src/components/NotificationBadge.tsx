@@ -1,6 +1,6 @@
 import { getUnreadCount } from "@/lib/notifications";
 import { Bell } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/Link";
 
 export async function NotificationBadge() {
   const unreadCount = await getUnreadCount("SCHULAMT");

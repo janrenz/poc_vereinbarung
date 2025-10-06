@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/Link";
 import { EntryFormFields } from "./EntryFormFields";
 import { AutosaveIndicator } from "./AutosaveIndicator";
 

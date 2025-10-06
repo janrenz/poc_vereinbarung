@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/Link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { HeaderNotifications } from "@/components/HeaderNotifications";
