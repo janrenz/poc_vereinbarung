@@ -1,5 +1,5 @@
 -- Add missing User fields for authentication and registration
-ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "schulamtName" TEXT;
+ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "schulaufsichtName" TEXT;
 ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "emailVerified" BOOLEAN NOT NULL DEFAULT false;
 ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "failedLoginAttempts" INTEGER NOT NULL DEFAULT 0;
 ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "lockedUntil" TIMESTAMP(3);

@@ -60,7 +60,7 @@ e2e/                          # Playwright E2E tests
 
 ### Overview
 
-The application implements **row-level authorization** where users from the Schulamt can only see and manage forms they created. This prevents users from accessing or modifying forms created by other users.
+The application implements **row-level authorization** where users from the schulaufsicht can only see and manage forms they created. This prevents users from accessing or modifying forms created by other users.
 
 ### Database Schema Changes
 
@@ -380,7 +380,7 @@ The privacy policy ([src/app/datenschutz/page.tsx](src/app/datenschutz/page.tsx)
 **Organizational Measures Documented:**
 - User management with role separation (ADMIN/SUPERADMIN)
 - Access logging for form creation and modification
-- Security training for Schulamt staff
+- Security training for schulaufsicht staff
 - Regular security audits
 - Incident response processes
 

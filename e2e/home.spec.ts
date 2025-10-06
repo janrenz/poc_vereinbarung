@@ -14,11 +14,11 @@ test.describe('Home Page', () => {
     
     // Check navigation
     await expect(page.getByRole('link', { name: 'Zielvereinbarung Digital' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Schulamt' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'schulaufsicht' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Schule' })).toBeVisible();
   });
 
-  test('should navigate to login when clicking Schulamt card', async ({ page }) => {
+  test('should navigate to login when clicking Schulaufsicht card', async ({ page }) => {
     await page.goto('/');
     
     await page.getByRole('link', { name: /Für Schulämter/i }).click();

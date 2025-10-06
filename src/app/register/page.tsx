@@ -9,7 +9,7 @@ import { ArrowLeft, UserPlus, CheckCircle2 } from "lucide-react";
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: "",
-    schulamtName: "",
+    schulaufsichtName: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -42,7 +42,7 @@ export default function RegisterPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: formData.name,
-          schulamtName: formData.schulamtName,
+          schulaufsichtName: formData.schulaufsichtName,
           email: formData.email,
           password: formData.password,
         }),
@@ -113,10 +113,10 @@ export default function RegisterPage() {
             <UserPlus className="w-8 h-8 text-[var(--md-sys-color-on-primary-container)]" />
           </motion.div>
           <h1 className="text-3xl font-bold tracking-tight text-[var(--md-sys-color-on-primary-container)]">
-            Schulamt Registrierung
+            Schulaufsicht Registrierung
           </h1>
           <p className="mt-2 text-[var(--md-sys-color-on-primary-container)] opacity-90">
-            Erstellen Sie ein Konto für Ihre Schulamts-Verwaltung
+            Erstellen Sie ein Konto für Ihre Schulaufsichts-Verwaltung
           </p>
           <p className="mt-3 text-sm text-[var(--md-sys-color-on-primary-container)] opacity-75">
             💡 Als Schule benötigen Sie keinen Account – nutzen Sie Ihren Zugangscode
@@ -165,18 +165,18 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="schulamtName" className="block text-sm font-medium mb-2 text-[var(--md-sys-color-on-surface)]">
-              Name des Schulamts
+            <label htmlFor="schulaufsichtName" className="block text-sm font-medium mb-2 text-[var(--md-sys-color-on-surface)]">
+              Name der Schulaufsicht
             </label>
             <input
-              id="schulamtName"
-              name="schulamtName"
+              id="schulaufsichtName"
+              name="schulaufsichtName"
               type="text"
               required
-              value={formData.schulamtName}
-              onChange={(e) => setFormData({ ...formData, schulamtName: e.target.value })}
+              value={formData.schulaufsichtName}
+              onChange={(e) => setFormData({ ...formData, schulaufsichtName: e.target.value })}
               className="w-full rounded-[var(--md-sys-shape-corner-small)] border border-[var(--md-sys-color-outline)] bg-[var(--md-sys-color-surface)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)] focus:border-transparent transition-all"
-              placeholder="Schulamt Musterstadt"
+              placeholder="Schulaufsicht Musterstadt"
             />
           </div>
 
@@ -193,7 +193,7 @@ export default function RegisterPage() {
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="w-full rounded-[var(--md-sys-shape-corner-small)] border border-[var(--md-sys-color-outline)] bg-[var(--md-sys-color-surface)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)] focus:border-transparent transition-all"
-              placeholder="ihre.email@schulamt.nrw.de"
+              placeholder="ihre.email@schulaufsicht.nrw.de"
             />
           </div>
 

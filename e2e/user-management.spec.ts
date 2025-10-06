@@ -11,7 +11,7 @@ test.describe('User Management - Benutzerverwaltung', () => {
     await page.goto('/login');
     
     // Login as superadmin
-    await page.fill('input[type="email"]', 'superadmin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'superadmin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'superadmin123');
     await page.click('button[type="submit"]');
     
@@ -25,13 +25,13 @@ test.describe('User Management - Benutzerverwaltung', () => {
     await expect(page.locator('text=Als Superadmin haben Sie nur Zugriff')).toBeVisible();
     
     // Should see current user email
-    await expect(page.locator('text=superadmin@schulamt.nrw')).toBeVisible();
+    await expect(page.locator('text=superadmin@schulaufsicht.nrw')).toBeVisible();
   });
 
   test('Superadmin cannot access form management', async ({ page }) => {
     // Login as superadmin
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'superadmin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'superadmin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'superadmin123');
     await page.click('button[type="submit"]');
     
@@ -45,7 +45,7 @@ test.describe('User Management - Benutzerverwaltung', () => {
   test('Superadmin cannot access form details', async ({ page }) => {
     // Login as superadmin
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'superadmin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'superadmin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'superadmin123');
     await page.click('button[type="submit"]');
     
@@ -59,7 +59,7 @@ test.describe('User Management - Benutzerverwaltung', () => {
   test('Superadmin cannot access notifications', async ({ page }) => {
     // Login as superadmin
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'superadmin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'superadmin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'superadmin123');
     await page.click('button[type="submit"]');
     
@@ -73,7 +73,7 @@ test.describe('User Management - Benutzerverwaltung', () => {
   test('Superadmin does not see notification badge in header', async ({ page }) => {
     // Login as superadmin
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'superadmin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'superadmin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'superadmin123');
     await page.click('button[type="submit"]');
     
@@ -89,7 +89,7 @@ test.describe('User Management - Benutzerverwaltung', () => {
     await page.goto('/login');
     
     // Login as admin
-    await page.fill('input[type="email"]', 'admin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'admin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'admin123');
     await page.click('button[type="submit"]');
     
@@ -97,14 +97,14 @@ test.describe('User Management - Benutzerverwaltung', () => {
     await expect(page).toHaveURL(/\/admin/);
     
     // Should see form management page
-    await expect(page.locator('h1')).toContainText('Schulamt');
+    await expect(page.locator('h1')).toContainText('schulaufsicht');
     await expect(page.locator('text=Letzte Formulare')).toBeVisible();
   });
 
   test('Admin cannot access user management', async ({ page }) => {
     // Login as admin
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'admin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'admin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'admin123');
     await page.click('button[type="submit"]');
     
@@ -118,7 +118,7 @@ test.describe('User Management - Benutzerverwaltung', () => {
   test('Superadmin can create a new Admin user', async ({ page }) => {
     // Login as superadmin
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'superadmin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'superadmin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'superadmin123');
     await page.click('button[type="submit"]');
     
@@ -126,7 +126,7 @@ test.describe('User Management - Benutzerverwaltung', () => {
     
     // Fill in new user form
     const timestamp = Date.now();
-    await page.fill('input[name="email"]', `testadmin${timestamp}@schulamt.nrw`);
+    await page.fill('input[name="email"]', `testadmin${timestamp}@schulaufsicht.nrw`);
     await page.fill('input[name="name"]', 'Test Admin');
     await page.fill('input[name="password"]', 'testpassword123');
     await page.selectOption('select[name="role"]', 'ADMIN');
@@ -138,14 +138,14 @@ test.describe('User Management - Benutzerverwaltung', () => {
     await page.waitForURL(/\/admin\/users/);
     
     // Should see new user in list
-    await expect(page.locator(`text=testadmin${timestamp}@schulamt.nrw`)).toBeVisible();
+    await expect(page.locator(`text=testadmin${timestamp}@schulaufsicht.nrw`)).toBeVisible();
     await expect(page.locator('text=Test Admin')).toBeVisible();
   });
 
   test('Superadmin can create a new Superadmin user', async ({ page }) => {
     // Login as superadmin
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'superadmin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'superadmin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'superadmin123');
     await page.click('button[type="submit"]');
     
@@ -153,7 +153,7 @@ test.describe('User Management - Benutzerverwaltung', () => {
     
     // Fill in new user form
     const timestamp = Date.now();
-    await page.fill('input[name="email"]', `testsuperadmin${timestamp}@schulamt.nrw`);
+    await page.fill('input[name="email"]', `testsuperadmin${timestamp}@schulaufsicht.nrw`);
     await page.fill('input[name="name"]', 'Test Superadmin');
     await page.fill('input[name="password"]', 'testpassword123');
     await page.selectOption('select[name="role"]', 'SUPERADMIN');
@@ -165,21 +165,21 @@ test.describe('User Management - Benutzerverwaltung', () => {
     await page.waitForURL(/\/admin\/users/);
     
     // Should see new user in list
-    await expect(page.locator(`text=testsuperadmin${timestamp}@schulamt.nrw`)).toBeVisible();
+    await expect(page.locator(`text=testsuperadmin${timestamp}@schulaufsicht.nrw`)).toBeVisible();
     await expect(page.locator('text=SUPERADMIN').nth(1)).toBeVisible(); // nth(1) because demo superadmin also exists
   });
 
   test('Superadmin can deactivate a user', async ({ page }) => {
     // First create a user to deactivate
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'superadmin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'superadmin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'superadmin123');
     await page.click('button[type="submit"]');
     
     await page.waitForURL(/\/admin\/users/);
     
     const timestamp = Date.now();
-    await page.fill('input[name="email"]', `todeactivate${timestamp}@schulamt.nrw`);
+    await page.fill('input[name="email"]', `todeactivate${timestamp}@schulaufsicht.nrw`);
     await page.fill('input[name="name"]', 'To Deactivate');
     await page.fill('input[name="password"]', 'testpassword123');
     await page.click('button[type="submit"]:has-text("Benutzer anlegen")');
@@ -187,14 +187,14 @@ test.describe('User Management - Benutzerverwaltung', () => {
     await page.waitForURL(/\/admin\/users/);
     
     // Find the user and click deactivate
-    const userRow = page.locator(`text=todeactivate${timestamp}@schulamt.nrw`).locator('..').locator('..');
+    const userRow = page.locator(`text=todeactivate${timestamp}@schulaufsicht.nrw`).locator('..').locator('..');
     await userRow.locator('button:has-text("Deaktivieren")').click();
     
     // Should reload
     await page.waitForURL(/\/admin\/users/);
     
     // Should see "Deaktiviert" status and "Aktivieren" button
-    const updatedUserRow = page.locator(`text=todeactivate${timestamp}@schulamt.nrw`).locator('..').locator('..');
+    const updatedUserRow = page.locator(`text=todeactivate${timestamp}@schulaufsicht.nrw`).locator('..').locator('..');
     await expect(updatedUserRow.locator('text=Deaktiviert')).toBeVisible();
     await expect(updatedUserRow.locator('button:has-text("Aktivieren")')).toBeVisible();
   });
@@ -202,14 +202,14 @@ test.describe('User Management - Benutzerverwaltung', () => {
   test('Superadmin can delete a user', async ({ page }) => {
     // First create a user to delete
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'superadmin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'superadmin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'superadmin123');
     await page.click('button[type="submit"]');
     
     await page.waitForURL(/\/admin\/users/);
     
     const timestamp = Date.now();
-    await page.fill('input[name="email"]', `todelete${timestamp}@schulamt.nrw`);
+    await page.fill('input[name="email"]', `todelete${timestamp}@schulaufsicht.nrw`);
     await page.fill('input[name="name"]', 'To Delete');
     await page.fill('input[name="password"]', 'testpassword123');
     await page.click('button[type="submit"]:has-text("Benutzer anlegen")');
@@ -217,10 +217,10 @@ test.describe('User Management - Benutzerverwaltung', () => {
     await page.waitForURL(/\/admin\/users/);
     
     // Confirm user exists
-    await expect(page.locator(`text=todelete${timestamp}@schulamt.nrw`)).toBeVisible();
+    await expect(page.locator(`text=todelete${timestamp}@schulaufsicht.nrw`)).toBeVisible();
     
     // Find the user and click delete (handle confirm dialog)
-    const userRow = page.locator(`text=todelete${timestamp}@schulamt.nrw`).locator('..').locator('..');
+    const userRow = page.locator(`text=todelete${timestamp}@schulaufsicht.nrw`).locator('..').locator('..');
     
     // Set up dialog handler before clicking
     page.on('dialog', dialog => dialog.accept());
@@ -231,13 +231,13 @@ test.describe('User Management - Benutzerverwaltung', () => {
     await page.waitForURL(/\/admin\/users/);
     
     // User should be gone
-    await expect(page.locator(`text=todelete${timestamp}@schulamt.nrw`)).not.toBeVisible();
+    await expect(page.locator(`text=todelete${timestamp}@schulaufsicht.nrw`)).not.toBeVisible();
   });
 
   test('Superadmin can see user list with roles and status', async ({ page }) => {
     // Login as superadmin
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'superadmin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'superadmin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'superadmin123');
     await page.click('button[type="submit"]');
     
@@ -261,14 +261,14 @@ test.describe('User Management - Benutzerverwaltung', () => {
   test('Password field requires minimum 8 characters', async ({ page }) => {
     // Login as superadmin
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'superadmin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'superadmin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'superadmin123');
     await page.click('button[type="submit"]');
     
     await page.waitForURL(/\/admin\/users/);
     
     // Try to create user with short password
-    await page.fill('input[name="email"]', 'shortpass@schulamt.nrw');
+    await page.fill('input[name="email"]', 'shortpass@schulaufsicht.nrw');
     await page.fill('input[name="password"]', 'short'); // Only 5 characters
     
     // Check if browser validation kicks in
@@ -280,7 +280,7 @@ test.describe('User Management - Benutzerverwaltung', () => {
   test('Info box explains Superadmin limitations', async ({ page }) => {
     // Login as superadmin
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'superadmin@schulamt.nrw');
+    await page.fill('input[type="email"]', 'superadmin@schulaufsicht.nrw');
     await page.fill('input[type="password"]', 'superadmin123');
     await page.click('button[type="submit"]');
     

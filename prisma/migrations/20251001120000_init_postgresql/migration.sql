@@ -2,7 +2,7 @@
 CREATE TYPE "FormStatus" AS ENUM ('DRAFT', 'SUBMITTED', 'RETURNED', 'APPROVED', 'ARCHIVED');
 
 -- CreateEnum
-CREATE TYPE "ActorRole" AS ENUM ('SCHULAMT', 'SCHULE', 'SYSTEM');
+CREATE TYPE "ActorRole" AS ENUM ('SCHULAUFSICHT', 'SCHULE', 'SYSTEM');
 
 -- CreateEnum
 CREATE TYPE "UserRole" AS ENUM ('SUPERADMIN', 'ADMIN');
@@ -116,7 +116,7 @@ CREATE TABLE "Notification" (
     "read" BOOLEAN NOT NULL DEFAULT false,
     "readAt" TIMESTAMP(3),
     "formId" TEXT NOT NULL,
-    "targetRole" "ActorRole" NOT NULL DEFAULT 'SCHULAMT',
+    "targetRole" "ActorRole" NOT NULL DEFAULT 'SCHULAUFSICHT',
 
     CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
 );

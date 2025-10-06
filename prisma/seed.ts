@@ -8,7 +8,7 @@ async function main() {
   console.log('🌱 Starting seed...');
 
   // Create admin user from ENV variables (for production)
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@schulamt.nrw';
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@schulaufsicht.nrw';
   const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
   const hashedAdminPassword = await bcrypt.hash(adminPassword, 12);
 
@@ -33,19 +33,19 @@ async function main() {
   // Create demo users (only in development)
   if (process.env.NODE_ENV !== 'production') {
     // Demo admin user for testing
-    const demoAdminPassword = await bcrypt.hash('schulamt123', 12);
+    const demoAdminPassword = await bcrypt.hash('schulaufsicht123', 12);
     const demoAdmin = await prisma.user.upsert({
-      where: { email: 'schulamt@example.com' },
+      where: { email: 'schulaufsicht@example.com' },
       update: {
         password: demoAdminPassword,
         active: true,
         emailVerified: true,
       },
       create: {
-        email: 'schulamt@example.com',
+        email: 'schulaufsicht@example.com',
         password: demoAdminPassword,
-        name: 'Demo Schulamt',
-        schulamtName: 'Schulamt Musterstadt',
+        name: 'Demo Schulaufsicht',
+        schulaufsichtName: 'Schulaufsicht Musterstadt',
         role: 'ADMIN',
         active: true,
         emailVerified: true,
@@ -56,14 +56,14 @@ async function main() {
     // Demo superadmin
     const demoSuperadminPassword = await bcrypt.hash('superadmin123', 12);
     const demoSuperadmin = await prisma.user.upsert({
-      where: { email: 'superadmin@schulamt.nrw' },
+      where: { email: 'superadmin@schulaufsicht.nrw' },
       update: {
         password: demoSuperadminPassword,
         active: true,
         emailVerified: true,
       },
       create: {
-        email: 'superadmin@schulamt.nrw',
+        email: 'superadmin@schulaufsicht.nrw',
         password: demoSuperadminPassword,
         name: 'Demo Superadmin',
         role: 'SUPERADMIN',
@@ -265,8 +265,8 @@ async function main() {
   await prisma.comment.create({
     data: {
       formId: form2.id,
-      authorRole: 'SCHULAMT',
-      authorName: 'Hr. Meier (Schulamt)',
+      authorRole: 'SCHULAUFSICHT',
+      authorName: 'Hr. Meier (Schulaufsicht)',
       message: 'Die Zielvereinbarung ist sehr gut strukturiert. Bitte ergänzen Sie noch konkrete Meilensteine für die Tablet-Einführung.',
       resolved: false,
     },
@@ -275,8 +275,8 @@ async function main() {
   await prisma.comment.create({
     data: {
       formId: form3.id,
-      authorRole: 'SCHULAMT',
-      authorName: 'Fr. Fischer (Schulamt)',
+      authorRole: 'SCHULAUFSICHT',
+      authorName: 'Fr. Fischer (Schulaufsicht)',
       message: 'Zielvereinbarung genehmigt. Wir freuen uns auf die Umsetzung und sind gespannt auf die Ergebnisse!',
       resolved: true,
     },

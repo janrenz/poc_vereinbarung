@@ -113,7 +113,7 @@ export default function DatenschutzPage() {
               <div>
                 <h3 className="font-semibold mb-2">Verarbeitete Daten:</h3>
                 <ul className="list-disc list-inside space-y-1 text-[var(--md-sys-color-on-surface-variant)]">
-                  <li>Login-Daten der Schulamt-Mitarbeiter (E-Mail, Passwort)</li>
+                  <li>Login-Daten der schulaufsicht-Mitarbeiter (E-Mail, Passwort)</li>
                   <li>Benutzer-ID zur Zuordnung erstellter Formulare</li>
                   <li>Schuldaten (Name, Adresse, Schulnummer)</li>
                   <li>Inhalte der Zielvereinbarungen</li>
@@ -164,7 +164,7 @@ export default function DatenschutzPage() {
                 bestehen.
               </p>
               <ul className="list-disc list-inside space-y-1">
-                <li>Zielvereinbarungen: Bis zur Archivierung oder Löschung durch das Schulamt</li>
+                <li>Zielvereinbarungen: Bis zur Archivierung oder Löschung durch das schulaufsicht</li>
                 <li>Login-Daten: Solange das Konto aktiv ist</li>
                 <li>Benutzer-Zuordnungen zu Formularen: Solange das Formular existiert</li>
                 <li>Zugangscodes: Bis zum Ablauf oder nach Verwendung</li>
@@ -193,7 +193,7 @@ export default function DatenschutzPage() {
                   Zugriffsbeschränkung
                 </p>
                 <p className="text-sm text-[var(--md-sys-color-on-tertiary-container)]">
-                  Die Anwendung stellt sicher, dass Schulamt-Mitarbeiter ausschließlich auf
+                  Die Anwendung stellt sicher, dass schulaufsicht-Mitarbeiter ausschließlich auf
                   von ihnen selbst erstellte Formulare zugreifen können. Dies wird durch
                   technische und organisatorische Maßnahmen gewährleistet (rollenbasierte
                   Zugriffskontrolle auf Datensatzebene).
@@ -313,7 +313,7 @@ export default function DatenschutzPage() {
                     <li>Zugangskontrolle durch Benutzerverwaltung</li>
                     <li>Trennung von ADMIN und SUPERADMIN Rollen</li>
                     <li>Protokollierung von Formular-Erstellung und -Zugriff</li>
-                    <li>Schulung der Schulamt-Mitarbeiter</li>
+                    <li>Schulung der schulaufsicht-Mitarbeiter</li>
                     <li>Regelmäßige Sicherheitsaudits</li>
                     <li>Incident-Response-Prozesse</li>
                   </ul>

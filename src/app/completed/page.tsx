@@ -95,7 +95,7 @@ export default function CompletedFormsPage() {
                 disabled={isSearching}
               />
               <p className="text-sm text-[var(--md-sys-color-on-surface-variant)] mt-2">
-                Den Zugangscode haben Sie vom Schulamt erhalten.
+                Den Zugangscode haben Sie vom Schulaufsicht erhalten.
               </p>
             </div>
 

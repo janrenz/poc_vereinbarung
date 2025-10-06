@@ -47,7 +47,7 @@ DATABASE_URL_UNPOOLED = ${POSTGRES_URL_NON_POOLING}
 AUTH_SECRET = "generiere-einen-sicheren-random-string"
 
 # Admin Credentials (WICHTIG: Ändern Sie dies!)
-ADMIN_EMAIL = "ihr-email@schulamt.nrw"
+ADMIN_EMAIL = "ihr-email@schulaufsicht.nrw"
 ADMIN_PASSWORD = "ein-sicheres-passwort"
 
 # Node Environment

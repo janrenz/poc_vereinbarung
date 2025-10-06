@@ -69,7 +69,7 @@ export default async function AdminFormDetailPage({ params }: { params: Promise<
 
   // Mark all unread notifications for this form as read
   const { markFormNotificationsAsRead } = await import("@/lib/notifications");
-  await markFormNotificationsAsRead(id, "SCHULAMT");
+  await markFormNotificationsAsRead(id, "SCHULAUFSICHT");
 
   async function approveForm() {
     "use server";
@@ -119,8 +119,8 @@ export default async function AdminFormDetailPage({ params }: { params: Promise<
       await prisma.comment.create({
         data: {
           formId: id,
-          authorRole: "SCHULAMT",
-          authorName: "Schulamt",
+          authorRole: "SCHULAUFSICHT",
+          authorName: "Schulaufsicht",
           message,
         },
       });
@@ -161,8 +161,8 @@ export default async function AdminFormDetailPage({ params }: { params: Promise<
       await prisma.comment.create({
         data: {
           formId: id,
-          authorRole: "SCHULAMT",
-          authorName: "Schulamt",
+          authorRole: "SCHULAUFSICHT",
+          authorName: "Schulaufsicht",
           message,
         },
       });

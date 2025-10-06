@@ -4,7 +4,7 @@ test.describe('Notification Read Marking', () => {
   test('should automatically mark notifications as read when opening form from notification', async ({ page }) => {
     // Login as admin
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'admin@schulamt.nrw');
+    await page.fill('input[name="email"]', 'admin@schulaufsicht.nrw');
     await page.fill('input[name="password"]', 'admin123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');
@@ -66,7 +66,7 @@ test.describe('Notification Read Marking', () => {
   test('should show correct unread count after viewing form', async ({ page }) => {
     // Login as admin
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'admin@schulamt.nrw');
+    await page.fill('input[name="email"]', 'admin@schulaufsicht.nrw');
     await page.fill('input[name="password"]', 'admin123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');
@@ -120,7 +120,7 @@ test.describe('Notification Read Marking', () => {
   test('should update notification badge count after viewing form', async ({ page }) => {
     // Login as admin
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'admin@schulamt.nrw');
+    await page.fill('input[name="email"]', 'admin@schulaufsicht.nrw');
     await page.fill('input[name="password"]', 'admin123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');
@@ -170,7 +170,7 @@ test.describe('Notification Read Marking', () => {
   test('should handle multiple notifications for same form', async ({ page }) => {
     // Login as admin
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'admin@schulamt.nrw');
+    await page.fill('input[name="email"]', 'admin@schulaufsicht.nrw');
     await page.fill('input[name="password"]', 'admin123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');
@@ -223,7 +223,7 @@ test.describe('Notification Read Marking', () => {
   test('should not mark other forms notifications as read', async ({ page }) => {
     // Login as admin
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'admin@schulamt.nrw');
+    await page.fill('input[name="email"]', 'admin@schulaufsicht.nrw');
     await page.fill('input[name="password"]', 'admin123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');

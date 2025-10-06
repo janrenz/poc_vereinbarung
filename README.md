@@ -1,13 +1,13 @@
 # Zielvereinbarung Digital
 
-Moderne, intuitive Plattform für digitale Zielvereinbarungen zwischen Schulen und Schulämtern.
+Moderne, intuitive Plattform für digitale Zielvereinbarungen zwischen Schulen und Schulaufsichtn.
 
 ## Features
 
-- ✅ **Schulamt-Bereich**: Schulen suchen (JedeSchule API), Formulare anlegen und verwalten
+- ✅ **schulaufsicht-Bereich**: Schulen suchen (JedeSchule API), Formulare anlegen und verwalten
 - ✅ **Schulen-Bereich**: Formulare über Zugangscode öffnen und ausfüllen  
 - ✅ **Material Design 3**: Moderne UI mit Animationen
-- ✅ **Authentication**: Cookie-basierte Authentifizierung für Schulamt
+- ✅ **Authentication**: Cookie-basierte Authentifizierung für schulaufsicht
 - ✅ **Database**: SQLite (lokal) / PostgreSQL (Vercel Production) mit Prisma ORM
 - ✅ **E2E Tests**: Playwright tests (21/27 passing)
 
@@ -47,14 +47,14 @@ The application uses [Resend](https://resend.com) for sending emails. Email func
 ```bash
 RESEND_API_KEY=re_your_api_key_here
 FROM_EMAIL=noreply@yourdomain.com  # or use onboarding@resend.dev for testing
-SCHULAMT_EMAIL=admin@schulamt.example.com  # Email for form submission notifications
+SCHULAUFSICHT_EMAIL=admin@schulaufsicht.example.com  # Email for form submission notifications
 ```
 
 ### Email Features
 
 The application sends emails for:
 - **Password Reset**: When users request to reset their password
-- **Form Submitted**: Notifies Schulamt when a school submits a form
+- **Form Submitted**: Notifies Schulaufsicht when a school submits a form
 - **Form Approved**: Notifies school when their form is approved
 - **Form Returned**: Notifies school when their form needs revisions
 
@@ -71,7 +71,7 @@ npx tsx prisma/create-superadmin.ts
 ```
 
 **Default Credentials:**
-- Email: `superadmin@schulamt.nrw`
+- Email: `superadmin@schulaufsicht.nrw`
 - Password: `Change-Me-123!`
 
 ⚠️ **WICHTIG:** Change this password immediately after first login or dont seed on prod!
@@ -94,12 +94,12 @@ npx tsx prisma/create-superadmin.ts
 After running `npm run dev`, you can login with these demo accounts:
 
 **Admin Account** (Form management only):
-- Email: `admin@schulamt.nrw`
+- Email: `admin@schulaufsicht.nrw`
 - Password: `admin123`
 - Access: Form management, notifications, no user management
 
 **Superadmin Account** (Full access):
-- Email: `superadmin@schulamt.nrw`
+- Email: `superadmin@schulaufsicht.nrw`
 - Password: `superadmin123`
 - Access: Form management + user management
 
@@ -122,7 +122,7 @@ For completed forms (SUBMITTED/APPROVED), use:
 
 ## Usage
 
-### For Schulämter (School Authorities):
+### For Schulaufsicht (School Authorities):
 
 1. Navigate to http://localhost:3000/login
 2. Login with demo credentials
@@ -133,7 +133,7 @@ For completed forms (SUBMITTED/APPROVED), use:
 ### For Schulen (Schools):
 
 1. Navigate to http://localhost:3000/formular
-2. Enter the access code provided by Schulamt
+2. Enter the access code provided by schulaufsicht
 3. Fill out the Zielvereinbarung form
 4. Save and submit
 

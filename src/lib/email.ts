@@ -174,7 +174,7 @@ export function getFormReturnedEmail(schoolName: string, accessCode: string, mes
             </div>
             <p>Bitte nehmen Sie folgende Änderungen vor:</p>
             <div class="feedback">
-              <strong>Feedback vom Schulamt:</strong><br>
+              <strong>Feedback von der Schulaufsicht:</strong><br>
               ${message}
             </div>
             <p><strong>Zugangscode:</strong> ${accessCode}</p>
@@ -236,7 +236,7 @@ export function getPasswordResetEmail(resetUrl: string, userName?: string) {
   };
 }
 
-export function getEmailVerificationEmail(verificationUrl: string, userName?: string, schulamtName?: string) {
+export function getEmailVerificationEmail(verificationUrl: string, userName?: string, schulaufsichtName?: string) {
   return {
     subject: "E-Mail-Adresse bestätigen - Zielvereinbarung Digital",
     html: `
@@ -261,7 +261,7 @@ export function getEmailVerificationEmail(verificationUrl: string, userName?: st
           </div>
           <div class="content">
             <p>${userName ? `Hallo ${userName}` : "Guten Tag"},</p>
-            <p>Vielen Dank für Ihre Registrierung bei Zielvereinbarung Digital${schulamtName ? ` für ${schulamtName}` : ""}.</p>
+            <p>Vielen Dank für Ihre Registrierung bei Zielvereinbarung Digital${schulaufsichtName ? ` für ${schulaufsichtName}` : ""}.</p>
             <p>Bitte bestätigen Sie Ihre E-Mail-Adresse, indem Sie auf den folgenden Button klicken:</p>
             <a href="${verificationUrl}" class="button">E-Mail-Adresse bestätigen</a>
             <p style="margin-top: 20px;"><small>Oder kopieren Sie diesen Link in Ihren Browser:<br><a href="${verificationUrl}">${verificationUrl}</a></small></p>

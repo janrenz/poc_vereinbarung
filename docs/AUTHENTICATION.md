@@ -15,7 +15,7 @@ The platform uses a secure, token-based authentication system with the following
 
 ## User Types
 
-### 1. Schulamt Users (Authenticated)
+### 1. Schulaufsicht Users (Authenticated)
 - Require account registration and login
 - Can create and manage forms for schools
 - Access admin dashboard
@@ -33,7 +33,7 @@ The platform uses a secure, token-based authentication system with the following
 **Endpoint:** `POST /api/auth/register`
 
 **Process:**
-1. User provides: name, schulamtName, email, password
+1. User provides: name, schulaufsichtName, email, password
 2. System validates input with Zod schema
 3. Password hashed with bcrypt (12 rounds)
 4. User created with `active: false, emailVerified: false`
@@ -161,7 +161,7 @@ Sessions automatically expire after 30 days or when:
 RESEND_API_KEY=re_xxxxxxxxxxxxx
 FROM_EMAIL=noreply@yourdomain.com
 NEXT_PUBLIC_APP_URL=https://yourdomain.com
-SCHULAMT_EMAIL=schulamt@yourdomain.com
+SCHULAUFSICHT_EMAIL=schulaufsicht@yourdomain.com
 ```
 
 ### Email Templates
@@ -176,7 +176,7 @@ SCHULAMT_EMAIL=schulamt@yourdomain.com
 - Contains reset link with 1h token
 - Security notice about unsolicited requests
 
-#### 3. Form Submitted (to Schulamt)
+#### 3. Form Submitted (to schulaufsicht)
 - Subject: "Neue Zielvereinbarung eingereicht"
 - School name and form details
 - Link to admin dashboard
@@ -331,7 +331,7 @@ model User {
   role      UserRole @default(ADMIN)
 
   name          String?
-  schulamtName  String?   // Organization name
+  schulaufsichtName  String?   // Organization name
   active        Boolean   @default(true)
   emailVerified Boolean   @default(false)
 
@@ -416,7 +416,7 @@ DATABASE_URL=postgresql://...
 RESEND_API_KEY=re_xxxxxxxxxxxxx
 FROM_EMAIL=noreply@yourdomain.com
 NEXT_PUBLIC_APP_URL=https://yourdomain.com
-SCHULAMT_EMAIL=schulamt@yourdomain.com
+SCHULAUFSICHT_EMAIL=schulaufsicht@yourdomain.com
 ```
 
 ### Database Migration
@@ -427,7 +427,7 @@ npx prisma migrate deploy
 
 This creates:
 - `emailVerified` field on User
-- `schulamtName` field on User
+- `schulaufsichtName` field on User
 - `EmailVerificationToken` table
 
 ### Security Headers

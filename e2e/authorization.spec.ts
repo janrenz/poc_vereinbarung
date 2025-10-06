@@ -53,10 +53,10 @@ test.describe("Form Authorization", () => {
 
   test("admin user should only see their own forms", async ({ page, context }) => {
     // Login as first admin
-    await loginAs(page, "admin@schulamt.nrw", "admin123");
+    await loginAs(page, "admin@schulaufsicht.nrw", "admin123");
 
     // Get the list of forms on the admin page
-    await page.waitForSelector("text=Schulamt – Formulare");
+    await page.waitForSelector("text=Schulaufsicht – Formulare");
     const formsAdmin1 = await page.locator('[class*="rounded-lg border-2"]').count();
 
     // Create a new form as admin1
@@ -79,10 +79,10 @@ test.describe("Form Authorization", () => {
 
     // Login as a different admin (create a second admin context)
     const page2 = await context.newPage();
-    await loginAs(page2, "admin@schulamt.nrw", "admin123");
+    await loginAs(page2, "admin@schulaufsicht.nrw", "admin123");
 
     // Verify the second admin sees their own forms (should not see admin1's form)
-    await page2.waitForSelector("text=Schulamt – Formulare");
+    await page2.waitForSelector("text=Schulaufsicht – Formulare");
 
     // Try to access the form created by admin1 directly via URL
     // First, get the form ID by checking the detail link
@@ -127,7 +127,7 @@ test.describe("Form Authorization", () => {
     request,
   }) => {
     // Login as admin
-    await loginAs(page, "admin@schulamt.nrw", "admin123");
+    await loginAs(page, "admin@schulaufsicht.nrw", "admin123");
 
     // Create a form
     await createFormViaUI(page);
@@ -147,7 +147,7 @@ test.describe("Form Authorization", () => {
     await page.waitForTimeout(500);
 
     // Login as superadmin (who should not have access to forms)
-    await loginAs(page, "superadmin@schulamt.nrw", "superadmin123");
+    await loginAs(page, "superadmin@schulaufsicht.nrw", "superadmin123");
 
     // Verify superadmin is redirected to user management
     await page.waitForURL("/admin/users");
@@ -161,7 +161,7 @@ test.describe("Form Authorization", () => {
     page,
   }) => {
     // Login as admin
-    await loginAs(page, "admin@schulamt.nrw", "admin123");
+    await loginAs(page, "admin@schulaufsicht.nrw", "admin123");
 
     // Create a form
     await createFormViaUI(page);
@@ -186,7 +186,7 @@ test.describe("Form Authorization", () => {
 
   test("export should only work for form creator", async ({ page, request }) => {
     // Login as admin
-    await loginAs(page, "admin@schulamt.nrw", "admin123");
+    await loginAs(page, "admin@schulaufsicht.nrw", "admin123");
 
     // Get cookies
     const cookies = await page.context().cookies();

@@ -104,18 +104,18 @@ export default function ForgotPasswordPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="ihre.email@schulamt.nrw.de"
+              placeholder="ihre.email@schulaufsicht.nrw.de"
               className="w-full rounded-[var(--md-sys-shape-corner-medium)] border-2 border-[var(--md-sys-color-outline)] bg-[var(--md-sys-color-surface)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)] focus:border-transparent"
             />
             <p className="text-xs text-[var(--md-sys-color-on-surface-variant)] mt-2">
-              Geben Sie die E-Mail-Adresse Ihres Schulamt-Kontos ein.
+              Geben Sie die E-Mail-Adresse Ihres schulaufsicht-Kontos ein.
             </p>
           </div>
 
           <div className="rounded-[var(--md-sys-shape-corner-medium)] bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)] p-4">
             <p className="text-sm">
-              <strong>💡 Hinweis für Schulen:</strong> Diese Funktion ist nur für Schulamt-Mitarbeiter.
-              Als Schule benötigen Sie keinen Account – verwenden Sie einfach den Zugangscode, den Sie von Ihrem Schulamt erhalten haben.
+              <strong>💡 Hinweis für Schulen:</strong> Diese Funktion ist nur für schulaufsicht-Mitarbeiter.
+              Als Schule benötigen Sie keinen Account – verwenden Sie einfach den Zugangscode, den Sie von Ihrem Schulaufsicht erhalten haben.
             </p>
           </div>
 

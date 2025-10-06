@@ -50,7 +50,7 @@ export async function PATCH(req: Request, context: { params: Promise<{ id: strin
 
 The application uses **two separate authentication mechanisms** that don't integrate properly:
 
-#### System 1: Cookie-Based Auth (Schulamt)
+#### System 1: Cookie-Based Auth (schulaufsicht)
 - **Location:** `/admin/*` routes
 - **Mechanism:** HTTP-only cookies (`auth-token`, `user-id`)
 - **Verification:** `getCurrentUser()` in `/lib/auth.ts`
@@ -73,7 +73,7 @@ The application uses **two separate authentication mechanisms** that don't integ
 │                         User Types                               │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                   │
-│  Schulamt Admin              │              School User          │
+│  Schulaufsicht Admin              │              School User          │
 │  (Cookie Auth)               │              (Access Code)        │
 │                              │                                   │
 │  Login → /admin              │              /formular/ABC123    │

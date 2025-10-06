@@ -8,8 +8,8 @@ test.describe('Autosave Functionality', () => {
     // Enter a test access code
     // First, create a form as admin
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'schulamt@example.com');
-    await page.fill('input[name="password"]', 'schulamt123');
+    await page.fill('input[name="email"]', 'schulaufsicht@example.com');
+    await page.fill('input[name="password"]', 'schulaufsicht123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');
     
@@ -39,8 +39,8 @@ test.describe('Autosave Functionality', () => {
   test('should show saving status when typing', async ({ page }) => {
     // Setup: Login and navigate to a form entry
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'schulamt@example.com');
-    await page.fill('input[name="password"]', 'schulamt123');
+    await page.fill('input[name="email"]', 'schulaufsicht@example.com');
+    await page.fill('input[name="password"]', 'schulaufsicht123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');
     
@@ -74,8 +74,8 @@ test.describe('Autosave Functionality', () => {
   test('should autosave when editing existing entry', async ({ page }) => {
     // Setup: Login and navigate to an existing entry
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'schulamt@example.com');
-    await page.fill('input[name="password"]', 'schulamt123');
+    await page.fill('input[name="email"]', 'schulaufsicht@example.com');
+    await page.fill('input[name="password"]', 'schulaufsicht123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');
     
@@ -136,8 +136,8 @@ test.describe('Autosave Functionality', () => {
   test('should show last saved time', async ({ page }) => {
     // Setup
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'schulamt@example.com');
-    await page.fill('input[name="password"]', 'schulamt123');
+    await page.fill('input[name="email"]', 'schulaufsicht@example.com');
+    await page.fill('input[name="password"]', 'schulaufsicht123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');
     
@@ -171,8 +171,8 @@ test.describe('Autosave Functionality', () => {
     
     // Setup
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'schulamt@example.com');
-    await page.fill('input[name="password"]', 'schulamt123');
+    await page.fill('input[name="email"]', 'schulaufsicht@example.com');
+    await page.fill('input[name="password"]', 'schulaufsicht123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');
     

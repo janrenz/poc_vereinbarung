@@ -22,8 +22,8 @@ test.describe('Formular Access Flow', () => {
   test('should create a form and access it with code', async ({ page }) => {
     // First, login as admin and create a form
     await page.goto('/login');
-    await page.getByLabel('Email').fill('schulamt@example.com');
-    await page.getByLabel('Passwort').fill('schulamt123');
+    await page.getByLabel('Email').fill('schulaufsicht@example.com');
+    await page.getByLabel('Passwort').fill('schulaufsicht123');
     await page.getByRole('button', { name: /Anmelden/i }).click();
     await expect(page).toHaveURL(/\/admin/);
 
@@ -68,8 +68,8 @@ test.describe('Formular Detail Page', () => {
     // Create a test form to work with
     const page = await browser.newPage();
     await page.goto('/login');
-    await page.getByLabel('Email').fill('schulamt@example.com');
-    await page.getByLabel('Passwort').fill('schulamt123');
+    await page.getByLabel('Email').fill('schulaufsicht@example.com');
+    await page.getByLabel('Passwort').fill('schulaufsicht123');
     await page.getByRole('button', { name: /Anmelden/i }).click();
     await page.waitForURL(/\/admin/);
 

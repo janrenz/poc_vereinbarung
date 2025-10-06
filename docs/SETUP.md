@@ -41,7 +41,7 @@ DATABASE_URL_UNPOOLED="postgresql://user:password@localhost:5432/zielvereinbarun
 # Email (optional for development)
 RESEND_API_KEY="re_xxxxxxxxxxxxx"
 FROM_EMAIL="noreply@yourdomain.com"
-SCHULAMT_EMAIL="schulamt@example.com"
+SCHULAUFSICHT_EMAIL="schulaufsicht@example.com"
 
 # Application
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
@@ -83,9 +83,9 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 After seeding, you can use these demo credentials:
 
-### Schulamt Admin
-- **Email:** schulamt@example.com
-- **Password:** schulamt123
+### Schulaufsicht Admin
+- **Email:** schulaufsicht@example.com
+- **Password:** schulaufsicht123
 
 ### Test Forms
 The seed creates sample forms for schools with access codes like:

@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { name, schulamtName, email, password } = validation.data;
+    const { name, schulaufsichtName, email, password } = validation.data;
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
         email: email.toLowerCase(),
         password: hashedPassword,
         name,
-        schulamtName,
+        schulaufsichtName,
         role: "ADMIN",
         active: false, // Not active until email verified
         emailVerified: false,
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
     // Send verification email
     const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     const verificationUrl = `${APP_URL}/verify-email?token=${token}`;
-    const emailContent = getEmailVerificationEmail(verificationUrl, user.name || undefined, user.schulamtName || undefined);
+    const emailContent = getEmailVerificationEmail(verificationUrl, user.name || undefined, user.schulaufsichtName || undefined);
 
     await sendEmail({
       to: user.email,
@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
       userAgent: req.headers.get("user-agent") || "unknown",
       success: true,
       metadata: {
-        schulamtName,
+        schulaufsichtName,
         emailVerified: false,
       },
     });

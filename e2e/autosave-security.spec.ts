@@ -45,7 +45,7 @@ test.describe("Autosave Security & Authorization", () => {
   }) => {
     // Login as admin and create a form
     await page.goto("/login");
-    await page.fill('input[name="email"]', "admin@schulamt.nrw");
+    await page.fill('input[name="email"]', "admin@schulaufsicht.nrw");
     await page.fill('input[name="password"]', "admin123");
     await page.click('button[type="submit"]');
     await page.waitForURL("/admin");
@@ -121,7 +121,7 @@ test.describe("Autosave Security & Authorization", () => {
   test("should allow autosave with valid access code", async ({ page }) => {
     // Login as admin and create a form
     await page.goto("/login");
-    await page.fill('input[name="email"]', "admin@schulamt.nrw");
+    await page.fill('input[name="email"]', "admin@schulaufsicht.nrw");
     await page.fill('input[name="password"]', "admin123");
     await page.click('button[type="submit"]');
     await page.waitForURL("/admin");
@@ -183,7 +183,7 @@ test.describe("Autosave Security & Authorization", () => {
   }) => {
     // Login as admin and create a form
     await page.goto("/login");
-    await page.fill('input[name="email"]', "admin@schulamt.nrw");
+    await page.fill('input[name="email"]', "admin@schulaufsicht.nrw");
     await page.fill('input[name="password"]', "admin123");
     await page.click('button[type="submit"]');
     await page.waitForURL("/admin");

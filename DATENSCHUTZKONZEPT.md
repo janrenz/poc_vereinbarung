@@ -9,7 +9,7 @@
 ## 1. Übersicht
 
 ### 1.1 Zweck der Plattform
-Die Plattform "NRW Zielvereinbarung Digital" dient der digitalen Erfassung, Verwaltung und Kommunikation von Zielvereinbarungen zwischen Schulämtern und Schulen im Land Nordrhein-Westfalen.
+Die Plattform "NRW Zielvereinbarung Digital" dient der digitalen Erfassung, Verwaltung und Kommunikation von Zielvereinbarungen zwischen Schulaufsichtn und Schulen im Land Nordrhein-Westfalen.
 
 ### 1.2 Rechtsgrundlagen
 - **DSGVO** (Datenschutz-Grundverordnung)
@@ -44,7 +44,7 @@ Völklinger Straße 49
 | Status (Entwurf/Eingereicht/Angenommen) | Workflow-Verwaltung | Art. 6 Abs. 1 lit. e DSGVO |
 | Timestamps (Erstellt/Geändert/Versendet/Angenommen) | Nachvollziehbarkeit | Art. 6 Abs. 1 lit. e DSGVO |
 
-### 2.3 Administratordaten (Schulamt)
+### 2.3 Administratordaten (schulaufsicht)
 | Datenart | Zweck | Rechtsgrundlage |
 |----------|-------|-----------------|
 | E-Mail-Adresse | Authentifizierung | Art. 6 Abs. 1 lit. e DSGVO |
@@ -86,7 +86,7 @@ Völklinger Straße 49
                        ▼
 ┌─────────────────────────────────────────────────┐
 │                                                 │
-│  ADMIN (Schulamt-Mitarbeiter)                   │
+│  ADMIN (schulaufsicht-Mitarbeiter)                   │
 │  - Zugriff nur auf EIGENE Formulare ⚠️         │
 │  - Formular-Erstellung für Schulen              │
 │  - Genehmigung/Rücksendung von Formularen       │
@@ -141,7 +141,7 @@ export async function isSuperAdmin(): Promise<boolean>
 - Erstellungsdatum
 - Letzter Login
 
-#### **3.2.2 Rolle: ADMIN (Schulamt-Mitarbeiter)**
+#### **3.2.2 Rolle: ADMIN (schulaufsicht-Mitarbeiter)**
 
 **Authentifizierung:**
 - Login mit E-Mail und Passwort
@@ -203,7 +203,7 @@ if (form.createdById !== currentUser.id) {
 | Formular absenden | ✅ Ja | Status: DRAFT/RETURNED → SUBMITTED |
 | PDF herunterladen | ✅ Ja | Nur eigenes Formular |
 | Kommentare lesen | ✅ Ja | Nur zu eigenem Formular |
-| Kommentare schreiben | ❌ Nein | Nur Schulamt |
+| Kommentare schreiben | ❌ Nein | Nur Schulaufsicht |
 | Andere Formulare einsehen | ❌ Nein | - |
 | Code teilen/weitergeben | ⚠️ Verantwortung | Schule ist verantwortlich |
 
@@ -271,7 +271,7 @@ const school = await prisma.school.findFirst({
 ### 4.1 Zugriffssicherheit
 
 #### **Session-Management**
-- Cookie-basierte Authentifizierung für Schulamt
+- Cookie-basierte Authentifizierung für schulaufsicht
 - HttpOnly Cookies (kein JavaScript-Zugriff)
 - Secure Flag (nur HTTPS)
 - SameSite=Strict (CSRF-Schutz)
@@ -383,7 +383,7 @@ console.log(`Unauthorized access attempt to form ${formId}`);
 | Datenart | Speicherdauer | Begründung |
 |----------|---------------|------------|
 | Zielvereinbarungen (aktiv) | Unbegrenzt | Pädagogische Dokumentation |
-| Zielvereinbarungen (archiviert) | Nach Bedarf | Schulamt entscheidet |
+| Zielvereinbarungen (archiviert) | Nach Bedarf | Schulaufsicht entscheidet |
 | **Benutzer-Formular-Zuordnungen** | **Solange Formular existiert** | **Autorisierung und Nachvollziehbarkeit** |
 | Benachrichtigungen | 6 Monate | Workflow-Nachvollziehbarkeit |
 | Session-Cookies (`auth-token`, `user-id`) | 7 Tage | Benutzerfreundlichkeit |
@@ -394,7 +394,7 @@ console.log(`Unauthorized access attempt to form ${formId}`);
 
 #### **Manuelle Löschung**
 ```typescript
-// Schulamt kann Formulare löschen
+// Schulaufsicht kann Formulare löschen
 async function deleteForm() {
   "use server";
   await prisma.form.delete({
@@ -422,19 +422,19 @@ async function deleteForm() {
 - Zugangscodes zu ihren Formularen
 - Status ihrer Zielvereinbarungen
 
-**Kontakt:** über Schulamt oder Ministerium
+**Kontakt:** über Schulaufsicht oder Ministerium
 
 ### 6.2 Berichtigungsrecht (Art. 16 DSGVO)
 **Schulen können:**
 - Formular-Inhalte jederzeit während Bearbeitung ändern
 - Bei Status RETURNED: Überarbeitung möglich
-- Bei Status SUBMITTED/APPROVED: Anfrage an Schulamt
+- Bei Status SUBMITTED/APPROVED: Anfrage an schulaufsicht
 
 ### 6.3 Löschungsrecht (Art. 17 DSGVO)
 **Einschränkungen:**
 - Pädagogische Dokumentationspflicht
 - Öffentliches Interesse (§ 3 DSG NRW)
-- **Anfrage:** über Schulamt
+- **Anfrage:** über schulaufsicht
 
 ### 6.4 Widerspruchsrecht (Art. 21 DSGVO)
 **Eingeschränkt:**
@@ -515,7 +515,7 @@ async function deleteForm() {
 #### **Zugriffsschutz**
 - ✅ Rollenbasierte Zugriffskontrolle (RBAC)
 - ✅ **Autorisierung auf Datensatzebene (Row-Level Security)** ✨
-- ✅ Schulamt-Mitarbeiter sehen nur eigene Formulare
+- ✅ schulaufsicht-Mitarbeiter sehen nur eigene Formulare
 - ✅ Schulen sehen nur eigene Daten
 - ✅ Zugangscode erforderlich für Schulen
 
@@ -536,7 +536,7 @@ async function deleteForm() {
 
 ### 10.1 Zielgruppen
 
-#### **Schulamt-Mitarbeiter**
+#### **schulaufsicht-Mitarbeiter**
 **Schulungsinhalte:**
 - ✅ Bedienung der Plattform
 - ✅ Datenschutzgrundsätze
@@ -587,7 +587,7 @@ async function deleteForm() {
 - [ ] **Environment Variables** sicher konfiguriert
 - [ ] **Starke Passwörter** für Admin-Accounts vergeben
 - [ ] **Backup-Strategie** etabliert
-- [ ] **Schulung** für Schulamt-Mitarbeiter durchgeführt
+- [ ] **Schulung** für schulaufsicht-Mitarbeiter durchgeführt
 - [ ] **Informationsmaterial** für Schulen erstellt
 - [ ] **Kontaktdaten** für Datenschutzanfragen hinterlegt
 

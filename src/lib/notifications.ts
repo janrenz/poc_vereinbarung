@@ -6,7 +6,7 @@ export async function createNotification(
   formId: string,
   type: NotificationType,
   message: string,
-  targetRole: "SCHULAMT" | "SCHULE" = "SCHULAMT"
+  targetRole: "SCHULAUFSICHT" | "SCHULE" = "SCHULAUFSICHT"
 ) {
   return await prisma.notification.create({
     data: {
@@ -18,7 +18,7 @@ export async function createNotification(
   });
 }
 
-export async function getUnreadNotifications(targetRole: "SCHULAMT" | "SCHULE" = "SCHULAMT") {
+export async function getUnreadNotifications(targetRole: "SCHULAUFSICHT" | "SCHULE" = "SCHULAUFSICHT") {
   return await prisma.notification.findMany({
     where: {
       targetRole,
@@ -37,7 +37,7 @@ export async function getUnreadNotifications(targetRole: "SCHULAMT" | "SCHULE" =
   });
 }
 
-export async function getUnreadCount(targetRole: "SCHULAMT" | "SCHULE" = "SCHULAMT") {
+export async function getUnreadCount(targetRole: "SCHULAUFSICHT" | "SCHULE" = "SCHULAUFSICHT") {
   return await prisma.notification.count({
     where: {
       targetRole,
@@ -56,7 +56,7 @@ export async function markAsRead(notificationId: string) {
   });
 }
 
-export async function markAllAsRead(targetRole: "SCHULAMT" | "SCHULE" = "SCHULAMT") {
+export async function markAllAsRead(targetRole: "SCHULAUFSICHT" | "SCHULE" = "SCHULAUFSICHT") {
   return await prisma.notification.updateMany({
     where: {
       targetRole,
@@ -69,7 +69,7 @@ export async function markAllAsRead(targetRole: "SCHULAMT" | "SCHULE" = "SCHULAM
   });
 }
 
-export async function markFormNotificationsAsRead(formId: string, targetRole: "SCHULAMT" | "SCHULE" = "SCHULAMT") {
+export async function markFormNotificationsAsRead(formId: string, targetRole: "SCHULAUFSICHT" | "SCHULE" = "SCHULAUFSICHT") {
   return await prisma.notification.updateMany({
     where: {
       formId,

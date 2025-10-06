@@ -48,23 +48,23 @@ export default async function FormByCodePage({ params }: { params: Promise<{ cod
       include: { school: true },
     });
 
-    // Create notification for Schulamt
+    // Create notification for Schulaufsicht
     await createNotification(
       form.id,
       "FORM_SUBMITTED",
       `Neue Zielvereinbarung von ${updatedForm.school.name} eingereicht`,
-      "SCHULAMT"
+      "SCHULAUFSICHT"
     );
 
-    // Send email notification to Schulamt
-    const schulamtEmail = process.env.SCHULAMT_EMAIL || "schulamt@example.com";
+    // Send email notification to Schulaufsicht
+    const schulaufsichtEmail = process.env.SCHULAUFSICHT_EMAIL || "schulaufsicht@example.com";
     const emailContent = getFormSubmittedEmail(
       updatedForm.school.name,
       form.id,
       code
     );
     await sendEmail({
-      to: schulamtEmail,
+      to: schulaufsichtEmail,
       subject: emailContent.subject,
       html: emailContent.html,
     });

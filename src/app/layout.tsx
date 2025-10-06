@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Zielvereinbarung Digital",
-  description: "Moderne, freundliche digitale Zielvereinbarungen für Schulen & Schulämter",
+  description: "Moderne, freundliche digitale Zielvereinbarungen für Schulen & Schulaufsicht",
 };
 
 export default async function RootLayout({
@@ -63,14 +63,14 @@ export default async function RootLayout({
                       className="px-4 py-2 text-[var(--md-sys-color-on-surface)] hover:bg-[var(--md-sys-color-surface-variant)] rounded transition-colors touch-manipulation font-medium"
                       href="/login"
                     >
-                      Schulamt
+                      Schulaufsicht
                     </Link>
                   ) : (
                     <Link
                       className="px-4 py-2 text-[var(--md-sys-color-on-surface)] hover:bg-[var(--md-sys-color-surface-variant)] rounded transition-colors touch-manipulation font-medium"
                       href="/admin"
                     >
-                      Schulamt
+                      Schulaufsicht
                     </Link>
                   )}
                   <Link

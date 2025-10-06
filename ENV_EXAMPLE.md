@@ -16,8 +16,8 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 RESEND_API_KEY=""
 FROM_EMAIL="noreply@zielvereinbarung.digital"
 
-# Schulamt Email for notifications
-SCHULAMT_EMAIL="schulamt@example.com"
+# Schulaufsicht Email for notifications
+SCHULAUFSICHT_EMAIL="schulaufsicht@example.com"
 ```
 
 ## Email Setup (Optional)

@@ -21,7 +21,7 @@ enum FormStatus {
 }
 
 enum ActorRole {
-  SCHULAMT
+  SCHULAUFSICHT
   SCHULE
   SYSTEM
 }
@@ -233,7 +233,7 @@ model Notification {
   form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
   
   // Optional: track who should see this notification
-  targetRole ActorRole @default(SCHULAMT)
+  targetRole ActorRole @default(SCHULAUFSICHT)
   
   @@index([formId])
   @@index([read])
@@ -250,7 +250,7 @@ model User {
   role      UserRole @default(ADMIN)
 
   name          String?  // Display name (optional)
-  schulamtName  String?  // Name of the Schulamt organization
+  schulaufsichtName  String?  // Name of the Schulaufsicht organization
   active        Boolean  @default(true)
   emailVerified Boolean  @default(false)
 

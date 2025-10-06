@@ -141,7 +141,7 @@ export const ResetPasswordSchema = z.object({
  */
 export const RegisterSchema = z.object({
   name: z.string().min(1, "Name ist erforderlich").max(255),
-  schulamtName: z.string().min(1, "Schulamt Name ist erforderlich").max(255),
+  schulaufsichtName: z.string().min(1, "Schulaufsicht Name ist erforderlich").max(255),
   email: EmailSchema,
   password: PasswordSchema,
 });

@@ -4,7 +4,7 @@ test.describe('Notification Workflow with Read Marking', () => {
   test('should create notification on form submission and mark as read when admin views form', async ({ page }) => {
     // Step 1: Login as admin and create a form
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'admin@schulamt.nrw');
+    await page.fill('input[name="email"]', 'admin@schulaufsicht.nrw');
     await page.fill('input[name="password"]', 'admin123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');
@@ -73,7 +73,7 @@ test.describe('Notification Workflow with Read Marking', () => {
 
     // Step 3: Login as admin again and check notifications
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'admin@schulamt.nrw');
+    await page.fill('input[name="email"]', 'admin@schulaufsicht.nrw');
     await page.fill('input[name="password"]', 'admin123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');
@@ -142,7 +142,7 @@ test.describe('Notification Workflow with Read Marking', () => {
   test('should show notification badge and clear after viewing form', async ({ page }) => {
     // Login as admin
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'admin@schulamt.nrw');
+    await page.fill('input[name="email"]', 'admin@schulaufsicht.nrw');
     await page.fill('input[name="password"]', 'admin123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');

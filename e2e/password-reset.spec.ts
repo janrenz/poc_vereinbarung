@@ -9,10 +9,10 @@ test.describe('Forgot Password Flow', () => {
     await expect(page.getByRole('button', { name: /Link anfordern/i })).toBeVisible();
   });
 
-  test('should show note that this is only for Schulamt staff', async ({ page }) => {
+  test('should show note that this is only for Schulaufsicht staff', async ({ page }) => {
     await page.goto('/forgot-password');
 
-    await expect(page.locator('text=/Diese Funktion ist nur für Schulamt-Mitarbeiter/i')).toBeVisible();
+    await expect(page.locator('text=/Diese Funktion ist nur für schulaufsicht-Mitarbeiter/i')).toBeVisible();
     await expect(page.locator('text=/Als Schule.*Zugangscode/i')).toBeVisible();
   });
 
@@ -29,7 +29,7 @@ test.describe('Forgot Password Flow', () => {
   test('should successfully request password reset', async ({ page }) => {
     await page.goto('/forgot-password');
 
-    await page.getByLabel('E-Mail-Adresse').fill('schulamt@example.com');
+    await page.getByLabel('E-Mail-Adresse').fill('schulaufsicht@example.com');
     await page.getByRole('button', { name: /Link anfordern/i }).click();
 
     // Should show success message (even if user doesn't exist - security)
@@ -230,7 +230,7 @@ test.describe('Integration: Full Password Reset Flow', () => {
   test('should complete full flow from forgot to reset (mock)', async ({ page }) => {
     // Step 1: Request password reset
     await page.goto('/forgot-password');
-    await page.getByLabel('E-Mail-Adresse').fill('schulamt@example.com');
+    await page.getByLabel('E-Mail-Adresse').fill('schulaufsicht@example.com');
     await page.getByRole('button', { name: /Link anfordern/i }).click();
 
     // Should show success

@@ -25,7 +25,7 @@ async function globalSetup() {
     const demoAdminPassword = await bcrypt.hash('admin123', 12);
     await prisma.user.create({
       data: {
-        email: 'admin@schulamt.nrw',
+        email: 'admin@schulaufsicht.nrw',
         password: demoAdminPassword,
         name: 'Demo Admin',
         role: 'ADMIN',
@@ -37,7 +37,7 @@ async function globalSetup() {
     const demoSuperadminPassword = await bcrypt.hash('superadmin123', 12);
     await prisma.user.create({
       data: {
-        email: 'superadmin@schulamt.nrw',
+        email: 'superadmin@schulaufsicht.nrw',
         password: demoSuperadminPassword,
         name: 'Demo Superadmin',
         role: 'SUPERADMIN',
@@ -46,12 +46,12 @@ async function globalSetup() {
       },
     });
 
-    const schulamtPassword = await bcrypt.hash('schulamt123', 12);
+    const schulaufsichtPassword = await bcrypt.hash('schulaufsicht123', 12);
     await prisma.user.create({
       data: {
-        email: 'schulamt@example.com',
-        password: schulamtPassword,
-        name: 'Schulamt Test User',
+        email: 'schulaufsicht@example.com',
+        password: schulaufsichtPassword,
+        name: 'Schulaufsicht Test User',
         role: 'ADMIN',
         active: true,
         emailVerified: true,

@@ -4,14 +4,14 @@ test.describe('Admin Flow', () => {
   // Login before each test
   test.beforeEach(async ({ page }) => {
     await page.goto('/login');
-    await page.getByLabel('Email').fill('schulamt@example.com');
-    await page.getByLabel('Passwort').fill('schulamt123');
+    await page.getByLabel('Email').fill('schulaufsicht@example.com');
+    await page.getByLabel('Passwort').fill('schulaufsicht123');
     await page.getByRole('button', { name: /Anmelden/i }).click();
     await expect(page).toHaveURL(/\/admin/);
   });
 
   test('should display admin dashboard', async ({ page }) => {
-    await expect(page.locator('text=Schulamt – Formulare')).toBeVisible();
+    await expect(page.locator('text=Schulaufsicht – Formulare')).toBeVisible();
     await expect(page.locator('text=Schule suchen')).toBeVisible();
   });
 

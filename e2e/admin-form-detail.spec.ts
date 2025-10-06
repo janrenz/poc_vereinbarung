@@ -4,15 +4,15 @@ test.describe('Admin Form Detail View', () => {
   test.beforeEach(async ({ page }) => {
     // Login as admin
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'schulamt@example.com');
-    await page.fill('input[name="password"]', 'schulamt123');
+    await page.fill('input[name="email"]', 'schulaufsicht@example.com');
+    await page.fill('input[name="password"]', 'schulaufsicht123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');
   });
 
   test('should display form list and navigate to detail view', async ({ page }) => {
     // Check if we're on admin page
-    await expect(page.getByText(/Schulamt – Formulare/i)).toBeVisible();
+    await expect(page.getByText(/Schulaufsicht – Formulare/i)).toBeVisible();
     
     // Wait for forms to load
     await page.waitForSelector('a[href^="/admin/forms/"]', { timeout: 5000 });
@@ -174,7 +174,7 @@ test.describe('Admin Form Detail View', () => {
     
     // Should navigate back to admin page
     await page.waitForURL('/admin');
-    await expect(page.getByText(/Schulamt – Formulare/i)).toBeVisible();
+    await expect(page.getByText(/Schulaufsicht – Formulare/i)).toBeVisible();
   });
 
   test('should export form as JSON', async ({ page }) => {

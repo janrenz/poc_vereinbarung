@@ -4,7 +4,7 @@ test.describe('Login Flow', () => {
   test('should display login page with form', async ({ page }) => {
     await page.goto('/login');
     
-    await expect(page.locator('text=Schulamt Login')).toBeVisible();
+    await expect(page.locator('text=Schulaufsicht Login')).toBeVisible();
     await expect(page.getByLabel('Email')).toBeVisible();
     await expect(page.getByLabel('Passwort')).toBeVisible();
     await expect(page.getByRole('button', { name: /Anmelden/i })).toBeVisible();
@@ -14,20 +14,20 @@ test.describe('Login Flow', () => {
     await page.goto('/login');
     
     await expect(page.locator('text=Demo-Zugangsdaten')).toBeVisible();
-    await expect(page.locator('text=schulamt@example.com')).toBeVisible();
-    await expect(page.locator('text=schulamt123')).toBeVisible();
+    await expect(page.locator('text=schulaufsicht@example.com')).toBeVisible();
+    await expect(page.locator('text=schulaufsicht123')).toBeVisible();
   });
 
   test('should successfully login with valid credentials', async ({ page }) => {
     await page.goto('/login');
     
-    await page.getByLabel('Email').fill('schulamt@example.com');
-    await page.getByLabel('Passwort').fill('schulamt123');
+    await page.getByLabel('Email').fill('schulaufsicht@example.com');
+    await page.getByLabel('Passwort').fill('schulaufsicht123');
     await page.getByRole('button', { name: /Anmelden/i }).click();
     
     // Should redirect to admin page
     await expect(page).toHaveURL(/\/admin/, { timeout: 10000 });
-    await expect(page.locator('text=Schulamt – Formulare')).toBeVisible();
+    await expect(page.locator('text=Schulaufsicht – Formulare')).toBeVisible();
   });
 
   test('should show error with invalid credentials', async ({ page }) => {

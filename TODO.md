@@ -15,7 +15,7 @@
 
 ### Abgeschlossen (Part 4 - 228/228 Stunden) ✅
 - ✅ Passwort-Reset-Funktionalität mit E-Mail-Verifizierung
-- ✅ Benutzer-Registrierung für Schulamt-Mitarbeiter
+- ✅ Benutzer-Registrierung für schulaufsicht-Mitarbeiter
 - ✅ E-Mail-Integration mit Resend API
 - ✅ E-Mail-Verifizierung mit 24h-Tokens
 - ✅ Rate-Limiting auf allen Auth-Endpunkten
@@ -27,7 +27,7 @@
 ### Offen (Part 5 - 82 Stunden)
 - [ ] **KRITISCH:** Datenbank-Migration ausführen (`npx prisma migrate dev`)
   * Fügt `emailVerified` Boolean zu User hinzu
-  * Fügt `schulamtName` String zu User hinzu
+  * Fügt `schulaufsichtName` String zu User hinzu
   * Erstellt `EmailVerificationToken` Tabelle
 - [ ] Rate-Limiting auf REST API-Endpunkte anwenden (Forms, Entries, Schools)
 - [ ] Input-Validierung in allen nicht-Auth Endpunkten
@@ -50,7 +50,7 @@
 - [ ] Filterfunktion für Startchancen-Schulen im Admin-Bereich
 - [ ] Spezielle Felder/Optionen nur für Startchancen-Schulen anzeigen (z.B. Zielbereich 2)
 
-### 2. Benachrichtigungssystem für Schulamt
+### 2. Benachrichtigungssystem für schulaufsicht
 **Status:** Aktuell keine Benachrichtigungen implementiert (nur `console.log`)
 
 #### In der Plattform:

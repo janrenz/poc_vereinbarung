@@ -7,8 +7,8 @@ test.describe('School Search', () => {
     await page.goto('/login');
     
     // Fill in login credentials
-    await page.fill('input[name="email"]', 'schulamt@example.com');
-    await page.fill('input[name="password"]', 'schulamt123');
+    await page.fill('input[name="email"]', 'schulaufsicht@example.com');
+    await page.fill('input[name="password"]', 'schulaufsicht123');
     
     // Click login button
     await page.click('button[type="submit"]');

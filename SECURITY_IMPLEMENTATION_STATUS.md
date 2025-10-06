@@ -284,7 +284,7 @@ npx prisma migrate resolve --rolled-back <migration-name>
 DATABASE_URL="${POSTGRES_PRISMA_URL}"
 DATABASE_URL_UNPOOLED="${POSTGRES_URL_NON_POOLING}"
 AUTH_SECRET="your-secret-key"
-ADMIN_EMAIL="admin@schulamt.nrw"
+ADMIN_EMAIL="admin@schulaufsicht.nrw"
 ADMIN_PASSWORD="secure-password-here"
 ADMIN_ROLE="SUPERADMIN"  # or "ADMIN"
 

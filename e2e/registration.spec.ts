@@ -4,9 +4,9 @@ test.describe('Registration Flow', () => {
   test('should display registration page with all fields', async ({ page }) => {
     await page.goto('/register');
 
-    await expect(page.locator('text=Schulamt Registrierung')).toBeVisible();
+    await expect(page.locator('text=Schulaufsicht Registrierung')).toBeVisible();
     await expect(page.getByLabel('Ihr Name')).toBeVisible();
-    await expect(page.getByLabel('Name des Schulamts')).toBeVisible();
+    await expect(page.getByLabel('Name der Schulaufsicht')).toBeVisible();
     await expect(page.getByLabel('E-Mail-Adresse')).toBeVisible();
     await expect(page.getByLabel('Passwort', { exact: true })).toBeVisible();
     await expect(page.getByLabel('Passwort bestätigen')).toBeVisible();
@@ -33,7 +33,7 @@ test.describe('Registration Flow', () => {
     await page.goto('/register');
 
     await page.getByLabel('Ihr Name').fill('Test User');
-    await page.getByLabel('Name des Schulamts').fill('Schulamt Test');
+    await page.getByLabel('Name der Schulaufsicht').fill('Schulaufsicht Test');
     await page.getByLabel('E-Mail-Adresse').fill('test@example.com');
     await page.getByLabel('Passwort', { exact: true }).fill('TestPassword123!@#');
     await page.getByLabel('Passwort bestätigen').fill('DifferentPassword123!@#');
@@ -46,7 +46,7 @@ test.describe('Registration Flow', () => {
     await page.goto('/register');
 
     await page.getByLabel('Ihr Name').fill('Test User');
-    await page.getByLabel('Name des Schulamts').fill('Schulamt Test');
+    await page.getByLabel('Name der Schulaufsicht').fill('Schulaufsicht Test');
     await page.getByLabel('E-Mail-Adresse').fill('test@example.com');
     await page.getByLabel('Passwort', { exact: true }).fill('weak');
     await page.getByLabel('Passwort bestätigen').fill('weak');
@@ -58,12 +58,12 @@ test.describe('Registration Flow', () => {
 
   test('should successfully register with valid data', async ({ page }) => {
     const timestamp = Date.now();
-    const testEmail = `schulamt-test-${timestamp}@example.com`;
+    const testEmail = `schulaufsicht-test-${timestamp}@example.com`;
 
     await page.goto('/register');
 
-    await page.getByLabel('Ihr Name').fill('Test Schulamt User');
-    await page.getByLabel('Name des Schulamts').fill('Schulamt Teststadt');
+    await page.getByLabel('Ihr Name').fill('Test Schulaufsicht User');
+    await page.getByLabel('Name der Schulaufsicht').fill('Schulaufsicht Teststadt');
     await page.getByLabel('E-Mail-Adresse').fill(testEmail);
     await page.getByLabel('Passwort', { exact: true }).fill('TestPassword123!@#');
     await page.getByLabel('Passwort bestätigen').fill('TestPassword123!@#');
@@ -80,8 +80,8 @@ test.describe('Registration Flow', () => {
 
     // Try to register with existing demo user email
     await page.getByLabel('Ihr Name').fill('Another User');
-    await page.getByLabel('Name des Schulamts').fill('Another Schulamt');
-    await page.getByLabel('E-Mail-Adresse').fill('schulamt@example.com');
+    await page.getByLabel('Name der Schulaufsicht').fill('Another schulaufsicht');
+    await page.getByLabel('E-Mail-Adresse').fill('schulaufsicht@example.com');
     await page.getByLabel('Passwort', { exact: true }).fill('TestPassword123!@#');
     await page.getByLabel('Passwort bestätigen').fill('TestPassword123!@#');
     await page.getByRole('button', { name: /Jetzt registrieren/i }).click();
@@ -98,7 +98,7 @@ test.describe('Registration Flow', () => {
       await page.goto('/register');
 
       await page.getByLabel('Ihr Name').fill(`Test User ${i}`);
-      await page.getByLabel('Name des Schulamts').fill(`Schulamt ${i}`);
+      await page.getByLabel('Name der Schulaufsicht').fill(`Schulaufsicht ${i}`);
       await page.getByLabel('E-Mail-Adresse').fill(`test-${timestamp}-${i}@example.com`);
       await page.getByLabel('Passwort', { exact: true }).fill('TestPassword123!@#');
       await page.getByLabel('Passwort bestätigen').fill('TestPassword123!@#');
@@ -130,7 +130,7 @@ test.describe('Registration Flow', () => {
     await registerLink.click();
 
     await expect(page).toHaveURL(/\/register/);
-    await expect(page.locator('text=Schulamt Registrierung')).toBeVisible();
+    await expect(page.locator('text=Schulaufsicht Registrierung')).toBeVisible();
   });
 
   test('should show password requirements hint', async ({ page }) => {
@@ -200,8 +200,8 @@ test.describe('Registration Security', () => {
 
     // Register with known email
     await page.getByLabel('Ihr Name').fill('Test User');
-    await page.getByLabel('Name des Schulamts').fill('Test Schulamt');
-    await page.getByLabel('E-Mail-Adresse').fill('schulamt@example.com');
+    await page.getByLabel('Name der Schulaufsicht').fill('Test schulaufsicht');
+    await page.getByLabel('E-Mail-Adresse').fill('schulaufsicht@example.com');
     await page.getByLabel('Passwort', { exact: true }).fill('TestPassword123!@#');
     await page.getByLabel('Passwort bestätigen').fill('TestPassword123!@#');
 
@@ -218,7 +218,7 @@ test.describe('Registration Security', () => {
     await page.goto('/register');
 
     await page.getByLabel('Ihr Name').fill("'; DROP TABLE users; --");
-    await page.getByLabel('Name des Schulamts').fill("Test'; DELETE FROM forms; --");
+    await page.getByLabel('Name der Schulaufsicht').fill("Test'; DELETE FROM forms; --");
     await page.getByLabel('E-Mail-Adresse').fill('test@example.com');
     await page.getByLabel('Passwort', { exact: true }).fill('TestPassword123!@#');
     await page.getByLabel('Passwort bestätigen').fill('TestPassword123!@#');
@@ -237,7 +237,7 @@ test.describe('Registration Security', () => {
 
     const xssPayload = '<script>alert("XSS")</script>';
     await page.getByLabel('Ihr Name').fill(xssPayload);
-    await page.getByLabel('Name des Schulamts').fill(xssPayload);
+    await page.getByLabel('Name der Schulaufsicht').fill(xssPayload);
     await page.getByLabel('E-Mail-Adresse').fill('test@example.com');
     await page.getByLabel('Passwort', { exact: true }).fill('TestPassword123!@#');
     await page.getByLabel('Passwort bestätigen').fill('TestPassword123!@#');

@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
-  const email = "superadmin@schulamt.nrw";
+  const email = "superadmin@schulaufsicht.nrw";
   const password = "Change-Me-123!"; // WICHTIG: Passwort nach erstem Login ändern!
   const name = "Superadmin";
 

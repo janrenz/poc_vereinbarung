@@ -69,7 +69,7 @@ export default async function AdminPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">Schulamt – Formulare</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Schulaufsicht – Formulare</h1>
       </div>
       <SchoolSearchCreate />
       <div className="space-y-2">

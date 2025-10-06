@@ -4,8 +4,8 @@ test.describe('Gantt Chart', () => {
   test.beforeEach(async ({ page }) => {
     // Login as admin and get an access code
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'schulamt@example.com');
-    await page.fill('input[name="password"]', 'schulamt123');
+    await page.fill('input[name="email"]', 'schulaufsicht@example.com');
+    await page.fill('input[name="password"]', 'schulaufsicht123');
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin');
   });

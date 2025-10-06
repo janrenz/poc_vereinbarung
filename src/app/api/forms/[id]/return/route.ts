@@ -124,8 +124,8 @@ export async function POST(
     await prisma.comment.create({
       data: {
         formId: id,
-        authorRole: "SCHULAMT",
-        authorName: "Schulamt",
+        authorRole: "SCHULAUFSICHT",
+        authorName: "Schulaufsicht",
         message,
       },
     });

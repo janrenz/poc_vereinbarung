@@ -80,7 +80,7 @@ export default async function UsersManagementPage() {
                 Benutzerverwaltung
               </h1>
               <p className="text-[var(--md-sys-color-on-surface-variant)] mt-1">
-                Schulamt-Logins verwalten · Eingeloggt als: {currentUser?.email}
+                Schulaufsicht-Logins verwalten · Eingeloggt als: {currentUser?.email}
               </p>
             </div>
           </div>
@@ -110,7 +110,7 @@ export default async function UsersManagementPage() {
                 name="email"
                 required
                 className="w-full rounded-[var(--md-sys-shape-corner-medium)] border-2 border-[var(--md-sys-color-outline)] bg-[var(--md-sys-color-surface)] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
-                placeholder="user@schulamt.de"
+                placeholder="user@schulaufsicht.de"
               />
             </div>
             <div>

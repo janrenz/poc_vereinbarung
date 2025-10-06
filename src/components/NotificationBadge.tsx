@@ -3,7 +3,7 @@ import { Bell } from "lucide-react";
 import Link from "@/components/Link";
 
 export async function NotificationBadge() {
-  const unreadCount = await getUnreadCount("SCHULAMT");
+  const unreadCount = await getUnreadCount("SCHULAUFSICHT");
 
   if (unreadCount === 0) {
     return (

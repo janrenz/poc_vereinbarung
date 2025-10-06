@@ -58,7 +58,7 @@ export function LoginForm() {
             <LogIn className="w-8 h-8 text-[var(--md-sys-color-on-primary-container)]" />
           </motion.div>
           <h1 className="text-3xl font-bold tracking-tight text-[var(--md-sys-color-on-primary-container)]">
-            Schulamt Login
+            Schulaufsicht Login
           </h1>
           <p className="mt-2 text-[var(--md-sys-color-on-primary-container)] opacity-90">
             Melden Sie sich an, um auf den Admin-Bereich zuzugreifen
@@ -105,7 +105,7 @@ export function LoginForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full rounded-[var(--md-sys-shape-corner-small)] border border-[var(--md-sys-color-outline)] bg-[var(--md-sys-color-surface)] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)] focus:border-transparent transition-all"
-                placeholder="schulamt@example.com"
+                placeholder="schulaufsicht@example.com"
               />
             </div>
 

@@ -23,7 +23,7 @@ export default async function NotificationsPage() {
 
   const notifications = await prisma.notification.findMany({
     where: {
-      targetRole: "SCHULAMT",
+      targetRole: "SCHULAUFSICHT",
     },
     include: {
       form: {
@@ -48,7 +48,7 @@ export default async function NotificationsPage() {
 
   async function markAllAsReadAction() {
     "use server";
-    await markAllAsRead("SCHULAMT");
+    await markAllAsRead("SCHULAUFSICHT");
     redirect("/admin/notifications");
   }
 

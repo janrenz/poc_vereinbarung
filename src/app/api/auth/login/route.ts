@@ -66,6 +66,9 @@ export async function POST(req: NextRequest) {
       const minutesLeft = Math.ceil(
         (user.lockedUntil.getTime() - Date.now()) / 60000
       );
+      console.error(
+        `[AUTH] Login failed for ${email}: Account locked until ${user.lockedUntil.toISOString()}`
+      );
       await logAudit({
         userId: user.id,
         userEmail: user.email,
@@ -85,6 +88,18 @@ export async function POST(req: NextRequest) {
     if (!user || !user.active || !isValidPassword) {
       // Increment failed attempts if user exists
       if (user) {
+        // Determine specific failure reason
+        let failureReason = "Invalid password";
+        if (!user.active) {
+          failureReason = "User account not active";
+        } else if (!isValidPassword) {
+          failureReason = "Invalid password";
+        }
+
+        console.error(
+          `[AUTH] Login failed for ${email}: ${failureReason} (attempt ${user.failedLoginAttempts + 1})`
+        );
+
         const failedAttempts = user.failedLoginAttempts + 1;
         const shouldLock = failedAttempts >= 5;
 
@@ -105,13 +120,14 @@ export async function POST(req: NextRequest) {
           ipAddress,
           userAgent,
           success: false,
-          errorMessage: "Invalid credentials",
+          errorMessage: failureReason,
           metadata: {
             failedAttempts,
             locked: shouldLock,
           },
         });
       } else {
+        console.error(`[AUTH] Login failed for ${email}: User not found`);
         await logAudit({
           userEmail: email,
           action: "LOGIN_FAILED",
