@@ -7,26 +7,106 @@ interface Section {
   id: string;
   title: string;
   number?: string;
+  checkFields: string[]; // Field names or selectors to check
 }
 
 const sections: Section[] = [
-  { id: "title", title: "Titel", number: "" },
-  { id: "section-1", title: "Zielsetzungen", number: "1" },
-  { id: "section-2", title: "Datengrundlage", number: "2" },
-  { id: "section-3", title: "Zielgruppe", number: "3" },
-  { id: "section-4", title: "Maßnahmen", number: "4" },
-  { id: "section-5", title: "Indikatoren", number: "5" },
-  { id: "section-6", title: "Verantwortliche", number: "6" },
-  { id: "section-7", title: "Zeitraum", number: "7" },
-  { id: "section-8", title: "Fortbildung", number: "8" },
+  { id: "title", title: "Titel", number: "", checkFields: ["input[name='title']"] },
+  {
+    id: "section-1",
+    title: "Zielsetzungen",
+    number: "1",
+    checkFields: [
+      "textarea[name='zielsetzungenText']",
+      "input[name='zielbereich1[]']:checked",
+      "input[name='zielbereich2[]']:checked",
+      "input[name='zielbereich3[]']:checked"
+    ]
+  },
+  {
+    id: "section-2",
+    title: "Datengrundlage",
+    number: "2",
+    checkFields: ["input[name='datengrundlage[]']:checked"]
+  },
+  {
+    id: "section-3",
+    title: "Zielgruppe",
+    number: "3",
+    checkFields: ["input[name='zielgruppe[]']:checked"]
+  },
+  {
+    id: "section-4",
+    title: "Maßnahmen",
+    number: "4",
+    checkFields: ["textarea[name='massnahmen']"]
+  },
+  {
+    id: "section-5",
+    title: "Indikatoren",
+    number: "5",
+    checkFields: ["textarea[name='indikatoren']"]
+  },
+  {
+    id: "section-6",
+    title: "Verantwortliche",
+    number: "6",
+    checkFields: ["textarea[name='verantwortlich']", "textarea[name='beteiligt']"]
+  },
+  {
+    id: "section-7",
+    title: "Zeitraum",
+    number: "7",
+    checkFields: ["select[name='beginnSchuljahr']", "select[name='endeSchuljahr']"]
+  },
+  {
+    id: "section-8",
+    title: "Fortbildung",
+    number: "8",
+    checkFields: ["input[name='fortbildungJa']"]
+  },
 ];
 
 interface EntryFormStickyNavProps {
   filledSections?: Set<string>;
 }
 
-export function EntryFormStickyNav({ filledSections = new Set() }: EntryFormStickyNavProps) {
+export function EntryFormStickyNav({ filledSections: initialFilledSections = new Set() }: EntryFormStickyNavProps) {
   const [activeSection, setActiveSection] = useState<string>("");
+  const [filledSections, setFilledSections] = useState<Set<string>>(initialFilledSections);
+
+  // Check if a section is filled based on form field values
+  const checkSectionFilled = (section: Section): boolean => {
+    return section.checkFields.some((selector) => {
+      const elements = document.querySelectorAll(selector);
+      return Array.from(elements).some((el) => {
+        if (el instanceof HTMLInputElement) {
+          if (el.type === "checkbox" || el.type === "radio") {
+            return el.checked;
+          }
+          return el.value.trim() !== "";
+        }
+        if (el instanceof HTMLTextAreaElement) {
+          return el.value.trim() !== "";
+        }
+        if (el instanceof HTMLSelectElement) {
+          return el.value !== "" && el.value !== null;
+        }
+        return false;
+      });
+    });
+  };
+
+  // Update filled sections status
+  const updateFilledSections = () => {
+    const newFilledSections = new Set<string>();
+    sections.forEach((section) => {
+      if (checkSectionFilled(section)) {
+        newFilledSections.add(section.id);
+      }
+    });
+    setFilledSections(newFilledSections);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,9 +130,23 @@ export function EntryFormStickyNav({ filledSections = new Set() }: EntryFormStic
       setActiveSection(currentSection);
     };
 
+    // Listen for form changes
+    const handleFormChange = () => {
+      updateFilledSections();
+    };
+
     handleScroll(); // Initial check
+    updateFilledSections(); // Initial filled sections check
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    document.addEventListener("input", handleFormChange);
+    document.addEventListener("change", handleFormChange);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("input", handleFormChange);
+      document.removeEventListener("change", handleFormChange);
+    };
   }, []);
 
   const scrollToSection = (id: string) => {
