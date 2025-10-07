@@ -166,7 +166,7 @@ export function EntryFormFields({ initialData }: { initialData?: EntryData }) {
           <legend className="text-sm font-semibold text-[var(--md-sys-color-on-surface)] mb-2">
             Zielbereich 3: RRSQ (Referenzrahmen Schulqualität)
           </legend>
-          <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
+          <div className="space-y-3">
             {[
               { value: "ib1_kompetenzen", label: "IB1: Fachliche und überfachliche Kompetenzen" },
               { value: "ib1_foerderung", label: "IB1: Individuelle Förderung" },
