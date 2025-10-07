@@ -74,6 +74,12 @@ export default async function FormByCodePage({ params }: { params: Promise<{ cod
 
   async function deleteEntry(entryId: string) {
     "use server";
+
+    // Security: Only allow deletion if form is in DRAFT or RETURNED status
+    if (form.status !== "DRAFT" && form.status !== "RETURNED") {
+      throw new Error("Entries can only be deleted from draft or returned forms");
+    }
+
     // Verify that the entry belongs to this form
     const entry = await prisma.entry.findUnique({
       where: { id: entryId },
@@ -84,6 +90,7 @@ export default async function FormByCodePage({ params }: { params: Promise<{ cod
       throw new Error("Entry not found or access denied");
     }
 
+    // Delete the entry
     await prisma.entry.delete({
       where: { id: entryId },
     });
@@ -168,7 +175,12 @@ export default async function FormByCodePage({ params }: { params: Promise<{ cod
           </Link>
         </div>
 
-        <EntryListClient entries={form.entries} code={code} deleteEntry={deleteEntry} />
+        <EntryListClient
+          entries={form.entries}
+          code={code}
+          deleteEntry={deleteEntry}
+          canDelete={form.status === "DRAFT" || form.status === "RETURNED"}
+        />
       </div>
 
       {/* Gantt Chart */}

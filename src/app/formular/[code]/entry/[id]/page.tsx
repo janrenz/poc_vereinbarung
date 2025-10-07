@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { FormNavigation } from "@/components/FormNavigation";
 import { EntryFormWithAutosaveClient } from "@/components/EntryFormWithAutosaveClient";
+import { EntryFormStickyNav } from "@/components/EntryFormStickyNav";
 
 export const dynamic = "force-dynamic";
 
@@ -27,9 +28,27 @@ export default async function EditEntryPage({
     redirect(`/formular/${code}`);
   }
 
+  // Check which sections are filled for the sticky nav
+  const filledSections = new Set<string>();
+  if (entry.title) filledSections.add("title");
+  if (entry.zielsetzungenText || (Array.isArray(entry.zielbereich1) && entry.zielbereich1.length > 0)) {
+    filledSections.add("section-1");
+  }
+  if (Array.isArray(entry.datengrundlage) && entry.datengrundlage.length > 0) {
+    filledSections.add("section-2");
+  }
+  if (Array.isArray(entry.zielgruppe) && entry.zielgruppe.length > 0) {
+    filledSections.add("section-3");
+  }
+  if (entry.massnahmen) filledSections.add("section-4");
+  if (entry.indikatoren) filledSections.add("section-5");
+  if (entry.verantwortlich || entry.beteiligt) filledSections.add("section-6");
+  if (entry.beginnSchuljahr || entry.endeSchuljahr) filledSections.add("section-7");
+  if (entry.fortbildungJa !== null) filledSections.add("section-8");
+
   return (
-    <div className="grid lg:grid-cols-[320px_1fr] gap-6">
-      {/* Sidebar Navigation */}
+    <div className="grid lg:grid-cols-[280px_1fr_240px] gap-6">
+      {/* Left Sidebar - Form Navigation */}
       <aside className="hidden lg:block">
         <div className="sticky top-6 space-y-6">
           <FormNavigation
@@ -42,7 +61,7 @@ export default async function EditEntryPage({
       </aside>
 
       {/* Main Content */}
-      <div className="space-y-6">
+      <div className="space-y-6 min-w-0">
         {/* Mobile Navigation */}
         <div className="lg:hidden">
           <FormNavigation
@@ -62,13 +81,18 @@ export default async function EditEntryPage({
           </p>
         </div>
 
-      <EntryFormWithAutosaveClient
-        entryId={id}
-        formId={ac.form.id}
-        code={code}
-        initialData={entry}
-      />
+        <EntryFormWithAutosaveClient
+          entryId={id}
+          formId={ac.form.id}
+          code={code}
+          initialData={entry}
+        />
       </div>
+
+      {/* Right Sidebar - Section Navigation */}
+      <aside className="hidden xl:block">
+        <EntryFormStickyNav filledSections={filledSections} />
+      </aside>
     </div>
   );
 }

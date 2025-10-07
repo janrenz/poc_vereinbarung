@@ -21,6 +21,7 @@ type Props = {
   entries: Entry[];
   code: string;
   deleteEntry: (entryId: string) => void;
+  canDelete?: boolean;
 };
 
 function parseSchuljahr(jahr: string | null): number {
@@ -36,7 +37,7 @@ function getTimelineValue(entry: Entry): number {
   return year + semester;
 }
 
-export function EntryListClient({ entries, code, deleteEntry }: Props) {
+export function EntryListClient({ entries, code, deleteEntry, canDelete = true }: Props) {
   const [sortConfig, setSortConfig] = useState<SortConfig>({
     field: "created",
     direction: "asc",
@@ -114,11 +115,13 @@ export function EntryListClient({ entries, code, deleteEntry }: Props) {
                 >
                   Bearbeiten
                 </Link>
-                <DeleteEntryButton
-                  entryId={entry.id}
-                  entryTitle={entry.title}
-                  deleteAction={deleteEntry}
-                />
+                {canDelete && (
+                  <DeleteEntryButton
+                    entryId={entry.id}
+                    entryTitle={entry.title}
+                    deleteAction={deleteEntry}
+                  />
+                )}
               </div>
             </div>
           ))}

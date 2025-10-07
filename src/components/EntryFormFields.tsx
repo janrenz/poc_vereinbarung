@@ -54,7 +54,7 @@ export function EntryFormFields({ initialData }: { initialData?: EntryData }) {
   return (
     <div className="space-y-8">
       {/* Title (Required) */}
-      <div className="md-surface rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1">
+      <div id="title" className="md-surface rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 scroll-mt-20">
         <h3 className="text-lg font-semibold text-[var(--md-sys-color-primary)] flex items-center gap-2 mb-4">
           Titel der Maßnahme
           <span className="text-sm font-normal text-[var(--md-sys-color-error)]">*Pflichtfeld</span>
@@ -77,7 +77,7 @@ export function EntryFormFields({ initialData }: { initialData?: EntryData }) {
       </div>
 
       {/* Field 1: Zielsetzungen und Zielbereiche */}
-      <div className="md-surface rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-6">
+      <div id="section-1" className="md-surface rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-6 scroll-mt-20">
         <h3 className="text-lg font-semibold text-[var(--md-sys-color-primary)]">
           1. Zielsetzungen und Zielbereiche
         </h3>
@@ -211,7 +211,7 @@ export function EntryFormFields({ initialData }: { initialData?: EntryData }) {
       </div>
 
       {/* Field 2: Datengrundlage */}
-      <div className="md-surface rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
+      <div id="section-2" className="md-surface scroll-mt-20 rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
         <h3 className="text-lg font-semibold text-[var(--md-sys-color-primary)]">
           2. Datengrundlage
         </h3>
@@ -260,7 +260,7 @@ export function EntryFormFields({ initialData }: { initialData?: EntryData }) {
       </div>
 
       {/* Field 3: Zielgruppe */}
-      <div className="md-surface rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
+      <div id="section-3" className="md-surface scroll-mt-20 rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
         <h3 className="text-lg font-semibold text-[var(--md-sys-color-primary)]">
           3. Zielgruppe der Maßnahme
         </h3>
@@ -326,7 +326,7 @@ export function EntryFormFields({ initialData }: { initialData?: EntryData }) {
       </div>
 
       {/* Field 4: Maßnahmen */}
-      <div className="md-surface rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
+      <div id="section-4" className="md-surface scroll-mt-20 rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
         <h3 className="text-lg font-semibold text-[var(--md-sys-color-primary)]">
           4. (Datengestützte) Maßnahme(n) zur Zielerreichung
         </h3>
@@ -340,7 +340,7 @@ export function EntryFormFields({ initialData }: { initialData?: EntryData }) {
       </div>
 
       {/* Field 5: Indikatoren */}
-      <div className="md-surface rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
+      <div id="section-5" className="md-surface scroll-mt-20 rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
         <h3 className="text-lg font-semibold text-[var(--md-sys-color-primary)]">
           5. Indikatoren: Wir haben das Ziel erreicht, wenn...
         </h3>
@@ -354,7 +354,7 @@ export function EntryFormFields({ initialData }: { initialData?: EntryData }) {
       </div>
 
       {/* Field 6: Verantwortliche */}
-      <div className="md-surface rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
+      <div id="section-6" className="md-surface scroll-mt-20 rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
         <h3 className="text-lg font-semibold text-[var(--md-sys-color-primary)]">
           6. Verantwortliche / beteiligte Person(en)
         </h3>
@@ -387,7 +387,7 @@ export function EntryFormFields({ initialData }: { initialData?: EntryData }) {
       </div>
 
       {/* Field 7: Zeitraum */}
-      <div className="md-surface rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
+      <div id="section-7" className="md-surface scroll-mt-20 rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
         <h3 className="text-lg font-semibold text-[var(--md-sys-color-primary)]">
           7. Beginn und Ende der Maßnahme
         </h3>
@@ -456,7 +456,7 @@ export function EntryFormFields({ initialData }: { initialData?: EntryData }) {
       </div>
 
       {/* Field 8: Fortbildung */}
-      <div className="md-surface rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
+      <div id="section-8" className="md-surface scroll-mt-20 rounded-[var(--md-sys-shape-corner-large)] p-4 md:p-6 md-elevation-1 space-y-4">
         <h3 className="text-lg font-semibold text-[var(--md-sys-color-primary)]">
           8. Unterstützung durch Fortbildung / andere Maßnahmen
         </h3>

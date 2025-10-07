@@ -241,3 +241,170 @@ test.describe("Entry Deletion Security", () => {
     await expect(page.locator('button:has-text("Löschen")')).not.toBeVisible();
   });
 });
+
+test.describe("Entry Deletion - Form Status Scenarios", () => {
+  let draftFormCode: string;
+  let submittedFormCode: string;
+  let returnedFormCode: string;
+
+  test.beforeEach(async ({ page }) => {
+    // Login as admin
+    await page.goto("/login");
+    await page.fill('input[name="email"]', "schulaufsicht@example.com");
+    await page.fill('input[name="password"]', "schulaufsicht123");
+    await page.click('button[type="submit"]');
+    await page.waitForURL("/admin");
+
+    // Create DRAFT form
+    await page.click('text=Neue Zielvereinbarung erstellen');
+    await page.fill('input[placeholder="Schule suchen..."]', "Test");
+    await page.click('text=Testschule');
+    await page.waitForSelector('text=Zugangscode');
+    const draftCode = await page.locator('[data-testid="access-code"]').first();
+    draftFormCode = (await draftCode.textContent()) || "";
+
+    // Add entry to draft form
+    await page.goto(`/formular/${draftFormCode}`);
+    await page.click('text=Neuer Eintrag');
+    await page.waitForURL(/\/formular\/.*\/entry\/new/);
+    await page.fill('input[name="title"]', "Draft Form Entry");
+    await page.fill('textarea[name="zielsetzungenText"]', "This can be deleted");
+    await page.click('button:has-text("Speichern und zurück")');
+    await page.waitForURL(`/formular/${draftFormCode}`);
+
+    // Create SUBMITTED form
+    await page.goto("/admin");
+    await page.click('text=Neue Zielvereinbarung erstellen');
+    await page.fill('input[placeholder="Schule suchen..."]', "Test");
+    await page.click('text=Testschule');
+    await page.waitForSelector('text=Zugangscode');
+    const submittedCode = await page.locator('[data-testid="access-code"]').last();
+    submittedFormCode = (await submittedCode.textContent()) || "";
+
+    // Add entry and submit
+    await page.goto(`/formular/${submittedFormCode}`);
+    await page.click('text=Neuer Eintrag');
+    await page.waitForURL(/\/formular\/.*\/entry\/new/);
+    await page.fill('input[name="title"]', "Submitted Form Entry");
+    await page.click('button:has-text("Speichern und zurück")');
+    await page.waitForURL(`/formular/${submittedFormCode}`);
+    await page.click('button:has-text("Absenden")');
+    await page.waitForURL(/\/completed\/view/);
+
+    // Create RETURNED form
+    await page.goto("/admin");
+    await page.click('text=Neue Zielvereinbarung erstellen');
+    await page.fill('input[placeholder="Schule suchen..."]', "Test");
+    await page.click('text=Testschule');
+    await page.waitForSelector('text=Zugangscode');
+    const returnedCode = await page.locator('[data-testid="access-code"]').last();
+    returnedFormCode = (await returnedCode.textContent()) || "";
+
+    // Add entry, submit, then return
+    await page.goto(`/formular/${returnedFormCode}`);
+    await page.click('text=Neuer Eintrag');
+    await page.waitForURL(/\/formular\/.*\/entry\/new/);
+    await page.fill('input[name="title"]', "Returned Form Entry");
+    await page.click('button:has-text("Speichern und zurück")');
+    await page.waitForURL(`/formular/${returnedFormCode}`);
+    await page.click('button:has-text("Absenden")');
+    await page.waitForURL(/\/completed\/view/);
+
+    // Return the form as admin
+    await page.goto("/admin");
+    const formLinks = await page.locator('a:has-text("Testschule")');
+    const count = await formLinks.count();
+    await formLinks.nth(count - 1).click(); // Click the last Testschule link
+    await page.waitForURL(/\/admin\/forms\//);
+    await page.click('button:has-text("Zurückweisen")');
+    await page.fill('textarea[name="comment"]', "Please revise");
+    await page.click('button[type="submit"]:has-text("Zurückweisen")');
+    await page.waitForURL("/admin");
+  });
+
+  test("DRAFT form: should allow deletion", async ({ page }) => {
+    await page.goto(`/formular/${draftFormCode}`);
+
+    // Delete button should be visible
+    await expect(page.locator('button:has-text("Löschen")')).toBeVisible();
+
+    // Should be able to delete
+    page.on("dialog", async (dialog) => {
+      await dialog.accept();
+    });
+
+    await page.locator('button:has-text("Löschen")').first().click();
+    await page.waitForURL(`/formular/${draftFormCode}`);
+
+    // Entry should be gone
+    await expect(page.locator('text=Draft Form Entry')).not.toBeVisible();
+    await expect(page.locator('text=Noch keine Einträge vorhanden')).toBeVisible();
+  });
+
+  test("SUBMITTED form: should NOT show delete button", async ({ page }) => {
+    // Try to access the form - should redirect to completed view
+    await page.goto(`/formular/${submittedFormCode}`);
+    await page.waitForURL(/\/completed\/view/);
+
+    // Delete button should NOT be visible in read-only view
+    await expect(page.locator('button:has-text("Löschen")')).not.toBeVisible();
+
+    // Entry should still be visible
+    await expect(page.locator('text=Submitted Form Entry')).toBeVisible();
+  });
+
+  test("RETURNED form: should allow deletion", async ({ page }) => {
+    await page.goto(`/formular/${returnedFormCode}`);
+
+    // Delete button should be visible
+    await expect(page.locator('button:has-text("Löschen")')).toBeVisible();
+
+    // Should be able to delete
+    page.on("dialog", async (dialog) => {
+      await dialog.accept();
+    });
+
+    await page.locator('button:has-text("Löschen")').first().click();
+    await page.waitForURL(`/formular/${returnedFormCode}`);
+
+    // Entry should be gone
+    await expect(page.locator('text=Returned Form Entry')).not.toBeVisible();
+  });
+
+  test("APPROVED form: should NOT allow deletion", async ({ page }) => {
+    // First create a new form and approve it
+    await page.goto("/admin");
+    await page.click('text=Neue Zielvereinbarung erstellen');
+    await page.fill('input[placeholder="Schule suchen..."]', "Test");
+    await page.click('text=Testschule');
+    await page.waitForSelector('text=Zugangscode');
+    const approvedCode = await page.locator('[data-testid="access-code"]').last();
+    const approvedFormCode = (await approvedCode.textContent()) || "";
+
+    // Add entry and submit
+    await page.goto(`/formular/${approvedFormCode}`);
+    await page.click('text=Neuer Eintrag');
+    await page.waitForURL(/\/formular\/.*\/entry\/new/);
+    await page.fill('input[name="title"]', "Approved Form Entry");
+    await page.click('button:has-text("Speichern und zurück")');
+    await page.waitForURL(`/formular/${approvedFormCode}`);
+    await page.click('button:has-text("Absenden")');
+    await page.waitForURL(/\/completed\/view/);
+
+    // Approve as admin
+    await page.goto("/admin");
+    const formLinks = await page.locator('a:has-text("Testschule")');
+    const count = await formLinks.count();
+    await formLinks.nth(count - 1).click(); // Click the last Testschule link
+    await page.waitForURL(/\/admin\/forms\//);
+    await page.click('button:has-text("Genehmigen")');
+    await page.waitForURL("/admin");
+
+    // Try to access form - should redirect to completed view
+    await page.goto(`/formular/${approvedFormCode}`);
+    await page.waitForURL(/\/completed\/view/);
+
+    // Delete button should NOT be visible
+    await expect(page.locator('button:has-text("Löschen")')).not.toBeVisible();
+  });
+});
